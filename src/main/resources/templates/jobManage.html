@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>就业管理</title>
+    <meta content="webkit" name="renderer">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" name="viewport"/>
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <script charset="utf-8" th:src="@{/js/jquery.min.js}" type="text/javascript"></script>
+    <script charset="utf-8" th:src="@{/layui/layui.js}" type="text/javascript"></script>
+    <script charset="utf-8" th:src="@{/js/xadmin.js}" type="text/javascript"></script>
+    <script charset="utf-8" th:src="@{/js/vue.js}" type="text/javascript"></script>
+</head>
+
+<body>
+<div class="x-nav">
+            <span class="layui-breadcrumb">
+                <a target="_top" th:href="@{/index}">首页</a>
+            </span>
+    <a class="layui-btn layui-btn-small" onclick="location.reload()"
+       style="line-height:1.6em;margin-top:3px;float:right" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+    </a>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12" id="vmJob">
+            <div class="layui-card">
+
+                <div class="layui-card-header">
+                    <button class="layui-btn" onclick="xadmin.open('添加就业','/jobAdd',500,700)">
+                        <i class="layui-icon"></i>添加就业
+                    </button>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-table layui-form">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>年度</th>
+                            <th>学号</th>
+                            <th>性别</th>
+                            <th>毕业去向</th>
+                            <th>实际单位</th>
+                            <th>单位所在地</th>
+                            <th>单位隶属</th>
+                            <th>单位性质</th>
+                            <th>单位类型</th>
+                            <th>行业性质</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="job,i in pageInfo.list">
+                            <td v-text="i+1"></td>
+                            <td v-text="job.year"></td>
+                            <td v-text="job.stuNo"></td>
+                            <td v-text="job.sex"></td>
+                            <td v-text="job.afterGraduation"></td>
+                            <td v-text="job.realCompany"></td>
+                            <td v-text="job.companyLocation"></td>
+                            <td v-text="job.companyUnder"></td>
+                            <td v-text="job.companyNature"></td>
+                            <td v-text="job.companyType"></td>
+                            <td v-text="job.industryNature"></td>
+                            <td class="td-manage">
+                                <button @click="editJob(job.id)"
+                                        class="layui-btn layui-btn-warm"
+                                        id="editJob"
+                                        onclick="xadmin.open('编辑就业','/jobEdit',500,700)">
+                                    <i class="layui-icon">&#xe631;</i>编辑
+                                </button>
+                                <button @click="viewJob(job.id)"
+                                        class="layui-btn"
+                                        id="viewJob"
+                                        onclick="xadmin.open('就业详情','/jobView',500,700)">
+                                    <i class="layui-icon layui-icon-console"></i>详情
+                                </button>
+                                <button @click="delJob(job.id)"
+                                        class="layui-btn layui-btn-danger"
+                                        id="delJob">
+                                    <i class="layui-icon">&#xe640;</i>删除
+                                </button>
+                            </td>
+                        </tr>
+                        <tr v-if="pageInfo.total == 0">
+                            <td colspan="100" style="text-align: center">暂无就业信息！</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-card-body" v-if="pageInfo.total != 0">
+                    <div class="page">
+                        <div>
+                            <a @click="getPage(pageInfo.firstPage)" class="prev" href="javascript:void(0)">
+                                首页
+                            </a>
+                            <a @click="getPage(pageInfo.prePage)" class="prev" href="javascript:void(0)"
+                               v-if="pageInfo.hasPreviousPage">
+                                上一页
+                            </a>
+                            <span @click="getPage(pageInfo.pageNum)" class="current">{{pageInfo.pageNum}} / {{pageInfo.pages}}</span>
+                            <a @click="getPage(pageInfo.nextPage)" class="next" href="javascript:void(0)"
+                               v-if="pageInfo.hasNextPage">
+                                下一页
+                            </a>
+                            <a @click="getPage(pageInfo.lastPage)" class="prev" href="javascript:void(0)"
+                               v-if="!pageInfo.isLastPage">
+                                末页
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+
+    layui.use(['form'], function () {
+    });
+
+    vm = new Vue({
+        el: "#vmJob",
+        data: {
+            pageInfo: {}
+        },
+        methods: {
+            getPage: function (pageNum, pageSize) {
+                var _this = this;
+                var url = "/job/page?pageNum=" + pageNum;
+
+                if (!pageSize) {
+                    url += "&pageSize=" + _this.pageInfo.pageSize;
+                } else {
+                    url += "&pageSize=" + pageSize;
+                }
+
+                $.getJSON(url, function (data) {
+                    _this.pageInfo = data;
+                });
+            },
+            /**
+             * 删除就业
+             */
+            delJob: function (id) {
+                layer.confirm('确认要删除吗？',
+                    function () {
+                        //发异步删除数据
+                        $.ajax({
+                            url: "/job/deleteById",
+                            data: {
+                                id: id
+                            },
+                            dataType: "json",
+                            type: "delete",
+                            success: function (result) {
+                                if (result.code === 200) {
+                                    layer.msg('删除成功', {
+                                        icon: 1,
+                                        time: 1000
+                                    });
+                                    setTimeout(function () {
+                                        window.location.reload();
+                                    }, 1000);
+                                } else {
+                                    layer.alert(result.msg, {icon: 5});
+                                }
+                            }
+                        });
+
+                    });
+            },
+            /**
+             *
+             * 修改就业
+             */
+            editJob: function (editJobId) {
+                //把要修改的editJobId存到sessionStorage中
+                sessionStorage.setItem("editJobId", editJobId);
+            },
+            /**
+             *
+             * 就业详情
+             */
+            viewJob: function (viewJobId) {
+                //把要修改的viewJobId存到sessionStorage中
+                sessionStorage.setItem("viewJobId", viewJobId);
+            }
+        },
+        created: function () {
+            this.getPage(1, 5);
+        }
+    });
+
+</script>
+</html>

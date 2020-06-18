@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学生就业分析</title>
+    <meta content="webkit" name="renderer">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" name="viewport"/>
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <script charset="utf-8" th:src="@{/js/jquery.min.js}" type="text/javascript"></script>
+    <script charset="utf-8" th:src="@{/layui/layui.js}" type="text/javascript"></script>
+    <script charset="utf-8" th:src="@{/js/xadmin.js}" type="text/javascript"></script>
+    <script charset="utf-8" th:src="@{/js/vue.js}" type="text/javascript"></script>
+</head>
+<body>
+<div class="x-nav">
+            <span class="layui-breadcrumb">
+                <a target="_top" th:href="@{/index}">首页</a>
+            </span>
+    <a class="layui-btn layui-btn-small" onclick="location.reload()"
+       style="line-height:1.6em;margin-top:3px;float:right" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+    </a>
+</div>
+<div class="layui-fluid" id="vmAnalysisData">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <form class="layui-form layui-col-space5" onsubmit="return false;">
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <input class="layui-input" id="start" name="studentNo" placeholder="请输入学号">
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <select name="sex">
+                                <option value="">性别</option>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <select name="schoolCode">
+                                <option value="">学院</option>
+                                <option :value="school.code" v-for="school,i in schoolList">{{school.name}}</option>
+                                <!--<option value="01">外国语学院</option>
+                                <option value="02">艺术学院</option>
+                                <option value="03">体育学院</option>
+                                <option value="04">美视电影学院</option>
+                                <option value="05">国际学院</option>
+                                <option value="06">弘深学院</option>
+                                <option value="07">博雅学院</option>
+                                <option value="08">公共管理学院</option>
+                                <option value="09">经济与工商管理学院</option>
+                                <option value="10">新闻学院</option>
+                                <option value="11">法学院</option>
+                                <option value="12">马克思主义学院</option>
+                                <option value="13">数学与统计学院</option>
+                                <option value="14">物理学院</option>
+                                <option value="15">化学化工学院</option>
+                                <option value="16">生命科学学院</option>
+                                <option value="17">机械工程学院</option>
+                                <option value="18">电气工程学院</option>
+                                <option value="19">能源与动力工程学院</option>
+                                <option value="20">资源与安全学院</option>
+                                <option value="21">材料科学与工程学院</option>
+                                <option value="22">航空航天学院</option>
+                                <option value="23">汽车工程学院</option>
+                                <option value="24">建筑城规学院</option>
+                                <option value="25">土木工程学院</option>
+                                <option value="26">环境与生态学院</option>
+                                <option value="27">管理科学与房地产学院</option>
+                                <option value="28">光电工程学院</option>
+                                <option value="29">微电子与通信工程学院</option>
+                                <option value="30">计算机学院</option>
+                                <option value="31">自动化学院</option>
+                                <option value="32">大数据与软件学院</option>
+                                <option value="33">药学院</option>
+                                <option value="34">生物工程学院</option>-->
+                            </select>
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <select name="grade">
+                                <option value="">年级</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <select name="createTime">
+                                <option value="">导入时间</option>
+                                <option :value="createTime"
+                                        v-for="createTime,i in createTimeList">{{createTime}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <button @click="analysis()" class="layui-btn" lay-filter="search" lay-submit="">
+                                <i class="layui-icon layui-icon-chart"></i>分析数据
+                            </button>
+                            <button class="layui-btn" type="reset">
+                                <i class="layui-icon layui-icon-refresh"></i>重置
+                            </button>
+                            <button class="layui-btn" id="uploadData">
+                                <i class="layui-icon"></i>导入消费数据
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-card-header">
+                    <div id="analysisParam"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-md12">
+        <div class="layui-card" v-if="importData.studentNoAnalysis">
+            <div class="layui-card-header">学生个人分析</div>
+            <div class="layui-card-body">
+                <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>日均消费额</h3>
+                            <p>
+                                <cite v-text="importData.studentNoAnalysis.dayUse"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.studentNoAnalysis.dayUse > 60">
+                                        日均消费水平过高，建议提醒学生更合理适当地消费
+                                    </span>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-else-if="importData.studentNoAnalysis.dayUse < 10">
+                                        学生在学生的日均消费过低，建议关心学生最近的消费情况，是否有不良反应
+                                    </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                        学生消费基本正常
+                                    </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>月均消费额</h3>
+                            <p>
+                                <cite v-text="importData.studentNoAnalysis.monthUse"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.studentNoAnalysis.monthUse > 1000">
+                                月消费水平过高，建议提醒学生更合理消费
+                            </span>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-else-if="importData.studentNoAnalysis.monthUse < 200">
+                                学生在学生的消费过低，建议关心学生最近的消费情况，是否有特殊原因
+                            </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                学生消费基本正常
+                            </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>日消费频率</h3>
+                            <p>
+                                <cite v-text="importData.studentNoAnalysis.dayFrequency"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.studentNoAnalysis.dayFrequency < 1">
+                                学生每天饮食消费异常，请及时关心了解情况
+                            </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                学生消费基本正常
+                            </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>月消费频率</h3>
+                            <p>
+                                <cite v-text="importData.studentNoAnalysis.monthFrequency"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.studentNoAnalysis.monthFrequency < 30">
+                                    学生饮食消费异常，请及时关心了解情况
+                                </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                    学生消费基本正常
+                                </span>
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="studentNo_situation" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
+                                <li class="layui-col-md4 layui-col-xs6">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（1st）</h3>
+                                        <p>
+                                            <cite v-text="importData.studentNoAnalysis.firstStation"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md4 layui-col-xs6" v-if="importData.commonAnalysis.secondStation">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（2nd）</h3>
+                                        <p>
+                                            <cite v-text="importData.studentNoAnalysis.secondStation"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md4 layui-col-xs6" v-if="importData.commonAnalysis.thirdStation">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（3rd）</h3>
+                                        <p>
+                                            <cite v-text="importData.studentNoAnalysis.thirdStation"></cite></p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="studentNo_station" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="studentNo_time" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card" v-else-if="showStudentEmpty">
+            <div class="layui-card-header">学生个人分析</div>
+            <div class="layui-card-body" style="font-size: 18px;color: #FFB800">
+                无该生消费数据!
+            </div>
+        </div>
+        <div class="layui-card" v-if="!importData.studentNoAnalysis && !showStudentEmpty && importData.sexAnalysis">
+            <div class="layui-card-header">性别分析</div>
+            <div class="layui-card-body ">
+                <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>日均消费额</h3>
+                            <p>
+                                <cite v-text="importData.sexAnalysis.dayUse"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.sexAnalysis.dayUse > 60">
+                                        日均消费水平过高，建议提醒学生更合理适当地消费
+                                    </span>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-else-if="importData.sexAnalysis.dayUse < 10">
+                                        学生在学生的日均消费过低，建议关心学生最近的消费情况，是否有不良反应
+                                    </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                        学生消费基本正常
+                                    </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>月均消费额</h3>
+                            <p>
+                                <cite v-text="importData.sexAnalysis.monthUse"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.sexAnalysis.monthUse > 1000">
+                                月消费水平过高，建议提醒学生更合理消费
+                            </span>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-else-if="importData.sexAnalysis.monthUse < 200">
+                                学生在学生的消费过低，建议关心学生最近的消费情况，是否有特殊原因
+                            </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                学生消费基本正常
+                            </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>日消费频率</h3>
+                            <p>
+                                <cite v-text="importData.sexAnalysis.dayFrequency"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.sexAnalysis.dayFrequency < 1">
+                                学生每天饮食消费异常，请及时关心了解情况
+                            </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                学生消费基本正常
+                            </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>月消费频率</h3>
+                            <p>
+                                <cite v-text="importData.sexAnalysis.monthFrequency"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.sexAnalysis.monthFrequency < 30">
+                                    学生饮食消费异常，请及时关心了解情况
+                                </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                    学生消费基本正常
+                                </span>
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
+                                <li class="layui-col-md4 layui-col-xs6">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（1st）</h3>
+                                        <p>
+                                            <cite v-text="importData.sexAnalysis.firstStation"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md4 layui-col-xs6" v-if="importData.commonAnalysis.secondStation">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（2nd）</h3>
+                                        <p>
+                                            <cite v-text="importData.sexAnalysis.secondStation"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md4 layui-col-xs6" v-if="importData.commonAnalysis.thirdStation">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（3rd）</h3>
+                                        <p>
+                                            <cite v-text="importData.sexAnalysis.thirdStation"></cite></p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="sex_station" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="sex_time" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card"
+             v-if="!importData.studentNoAnalysis && !showStudentEmpty && importData.schoolCodeAnalysis">
+            <div class="layui-card-header">学院分析</div>
+            <div class="layui-card-body ">
+                <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>日均消费额</h3>
+                            <p>
+                                <cite v-text="importData.schoolCodeAnalysis.dayUse"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.schoolCodeAnalysis.dayUse > 60">
+                                        日均消费水平过高，建议提醒学生更合理适当地消费
+                                    </span>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-else-if="importData.schoolCodeAnalysis.dayUse < 10">
+                                        学生在学生的日均消费过低，建议关心学生最近的消费情况，是否有不良反应
+                                    </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                        学生消费基本正常
+                                    </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>月均消费额</h3>
+                            <p>
+                                <cite v-text="importData.schoolCodeAnalysis.monthUse"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.schoolCodeAnalysis.monthUse > 1000">
+                                月消费水平过高，建议提醒学生更合理消费
+                            </span>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-else-if="importData.schoolCodeAnalysis.monthUse < 200">
+                                学生在学生的消费过低，建议关心学生最近的消费情况，是否有特殊原因
+                            </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                学生消费基本正常
+                            </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>日消费频率</h3>
+                            <p>
+                                <cite v-text="importData.schoolCodeAnalysis.dayFrequency"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.schoolCodeAnalysis.dayFrequency < 1">
+                                学生每天饮食消费异常，请及时关心了解情况
+                            </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                学生消费基本正常
+                            </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>月消费频率</h3>
+                            <p>
+                                <cite v-text="importData.schoolCodeAnalysis.monthFrequency"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.schoolCodeAnalysis.monthFrequency < 30">
+                                    学生饮食消费异常，请及时关心了解情况
+                                </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                    学生消费基本正常
+                                </span>
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
+                                <li class="layui-col-md4 layui-col-xs6">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（1st）</h3>
+                                        <p>
+                                            <cite v-text="importData.schoolCodeAnalysis.firstStation"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md4 layui-col-xs6" v-if="importData.commonAnalysis.secondStation">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（2nd）</h3>
+                                        <p>
+                                            <cite v-text="importData.schoolCodeAnalysis.secondStation"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md4 layui-col-xs6" v-if="importData.commonAnalysis.thirdStation">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（3rd）</h3>
+                                        <p>
+                                            <cite v-text="importData.schoolCodeAnalysis.thirdStation"></cite></p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="schoolCode_station" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="schoolCode_time" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card" v-if="!importData.studentNoAnalysis && !showStudentEmpty && importData.gradeAnalysis">
+            <div class="layui-card-header">年级分析</div>
+            <div class="layui-card-body ">
+                <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>日均消费额</h3>
+                            <p>
+                                <cite v-text="importData.gradeAnalysis.dayUse"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.gradeAnalysis.dayUse > 60">
+                                        日均消费水平过高，建议提醒学生更合理适当地消费
+                                    </span>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-else-if="importData.gradeAnalysis.dayUse < 10">
+                                        学生在学生的日均消费过低，建议关心学生最近的消费情况，是否有不良反应
+                                    </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                        学生消费基本正常
+                                    </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>月均消费额</h3>
+                            <p>
+                                <cite v-text="importData.gradeAnalysis.monthUse"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.gradeAnalysis.monthUse > 1000">
+                                月消费水平过高，建议提醒学生更合理消费
+                            </span>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-else-if="importData.gradeAnalysis.monthUse < 200">
+                                学生在学生的消费过低，建议关心学生最近的消费情况，是否有特殊原因
+                            </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                学生消费基本正常
+                            </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>日消费频率</h3>
+                            <p>
+                                <cite v-text="importData.gradeAnalysis.dayFrequency"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.gradeAnalysis.dayFrequency < 1">
+                                学生每天饮食消费异常，请及时关心了解情况
+                            </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                学生消费基本正常
+                            </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>月消费频率</h3>
+                            <p>
+                                <cite v-text="importData.gradeAnalysis.monthFrequency"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.gradeAnalysis.monthFrequency < 30">
+                                    学生饮食消费异常，请及时关心了解情况
+                                </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                    学生消费基本正常
+                                </span>
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
+                                <li class="layui-col-md4 layui-col-xs6">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（1st）</h3>
+                                        <p>
+                                            <cite v-text="importData.gradeAnalysis.firstStation"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md4 layui-col-xs6" v-if="importData.commonAnalysis.secondStation">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（2nd）</h3>
+                                        <p>
+                                            <cite v-text="importData.gradeAnalysis.secondStation"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md4 layui-col-xs6" v-if="importData.commonAnalysis.thirdStation">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（3rd）</h3>
+                                        <p>
+                                            <cite v-text="importData.gradeAnalysis.thirdStation"></cite></p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="grade_station" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="grade_time" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card" v-if="!importData.studentNoAnalysis && !showStudentEmpty && importData.commonAnalysis">
+            <div class="layui-card-header">综合分析</div>
+            <div class="layui-card-body ">
+                <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>日均消费额</h3>
+                            <p>
+                                <cite v-text="importData.commonAnalysis.dayUse"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.commonAnalysis.dayUse > 60">
+                                        日均消费水平过高，建议提醒学生更合理适当地消费
+                                    </span>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-else-if="importData.commonAnalysis.dayUse < 10">
+                                        学生在学生的日均消费过低，建议关心学生最近的消费情况，是否有不良反应
+                                    </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                        学生消费基本正常
+                                    </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>月均消费额</h3>
+                            <p>
+                                <cite v-text="importData.commonAnalysis.monthUse"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.commonAnalysis.monthUse > 1000">
+                                月消费水平过高，建议提醒学生更合理消费
+                            </span>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-else-if="importData.commonAnalysis.monthUse < 200">
+                                学生在学生的消费过低，建议关心学生最近的消费情况，是否有特殊原因
+                            </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                学生消费基本正常
+                            </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>日消费频率</h3>
+                            <p>
+                                <cite v-text="importData.commonAnalysis.dayFrequency"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.commonAnalysis.dayFrequency < 1">
+                                学生每天饮食消费异常，请及时关心了解情况
+                            </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                学生消费基本正常
+                            </span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="layui-col-md6 layui-col-xs6">
+                        <a class="x-admin-backlog-body" href="javascript:">
+                            <h3>月消费频率</h3>
+                            <p>
+                                <cite v-text="importData.commonAnalysis.monthFrequency"></cite>
+                                <span style="font-size: 14px; color:#FFB800"
+                                      v-if="importData.commonAnalysis.monthFrequency < 30">
+                                    学生饮食消费异常，请及时关心了解情况
+                                </span>
+                                <span style="font-size: 14px; color:green" v-else>
+                                    学生消费基本正常
+                                </span>
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
+                                <li class="layui-col-md4 layui-col-xs6">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（1st）</h3>
+                                        <p>
+                                            <cite v-text="importData.commonAnalysis.firstStation"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md4 layui-col-xs6" v-if="importData.commonAnalysis.secondStation">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（2nd）</h3>
+                                        <p>
+                                            <cite v-text="importData.commonAnalysis.secondStation"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md4 layui-col-xs6" v-if="importData.commonAnalysis.thirdStation">
+                                    <a class="x-admin-backlog-body" href="javascript:">
+                                        <h3>最常去的三家学生（3rd）</h3>
+                                        <p>
+                                            <cite v-text="importData.commonAnalysis.thirdStation"></cite></p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="common_station" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="common_time" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script charset="utf-8" th:src="@{/js/echarts.js}" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var vm = new Vue({
+        el: "#vmAnalysisData",
+        data: {
+            schoolList: [],
+            createTimeList: [],
+            importData: {},
+            showStudentEmpty: false
+        },
+        created: function () {
+            var _this = this;
+            $.ajax({
+                url: "/school/list",
+                dataType: "json",
+                type: "get",
+                success: function (result) {
+                    _this.schoolList = result.data;
+                }
+            });
+            $.ajax({
+                url: "/importLog/getImportTime",
+                dataType: "json",
+                type: "get",
+                success: function (result) {
+                    _this.createTimeList = result.data;
+                }
+            });
+
+            $.ajax({
+                url: "/importLog/getAnalysisData",
+                data: {
+                    studentNo: $("[name=studentNo]").val().trim(),
+                    sex: $("[name=sex]").val().trim(),
+                    schoolCode: $("[name=schoolCode]").val().trim(),
+                    grade: $("[name=grade]").val().trim(),
+                    createTime: $("[name=createTime]").val().trim()
+                },
+                dataType: "json",
+                type: "get",
+                success: function (result) {
+
+                    if (result.code === 200) {
+                        _this.importData = result.data;
+
+                        var commonAnalysis = result.data.commonAnalysis;
+
+                        if (commonAnalysis) {
+                            _this.initStation(commonAnalysis, "common")
+                            _this.initTime(commonAnalysis, "common")
+                        }
+
+                    } else {
+                        layer.msg("初始加载失败！", {icon: 2});
+                    }
+
+                }
+            });
+
+        }, methods: {
+            /**
+             * 执行分析
+             */
+            analysis: function () {
+                var loading = layer.load();
+                var _this = this;
+
+                var studentNo = $("[name=studentNo]").val().trim();
+                var sex = $("[name=sex]").val().trim();
+                var schoolCode = $("[name=schoolCode]").val().trim();
+                var schoolName = $("[name=schoolCode] option:selected").text().trim();
+                var grade = $("[name=grade]").val().trim();
+                var createTime = $("[name=createTime]").val().trim();
+
+                $.ajax({
+                    url: "/importLog/getAnalysisData",
+                    data: {
+                        studentNo: studentNo,
+                        sex: sex,
+                        schoolCode: schoolCode,
+                        grade: grade,
+                        createTime: createTime
+                    },
+                    dataType: "json",
+                    type: "get",
+                    success: function (result) {
+                        layer.close(loading);
+                        console.info(result.data);
+
+                        if (result.code === 200) {
+
+                            //填充分析数据
+                            var param = '分析数据条件：';
+
+                            if (studentNo.length > 0) {
+                                param += '学号=' + studentNo + ' 和 ';
+                            } else {
+                                _this.showStudentEmpty = false;
+                            }
+
+                            if (sex.length > 0) {
+                                param += '性别=' + sex + ' 和 ';
+                            }
+                            if (schoolCode.length > 0) {
+                                param += '学院编号=' + schoolCode + ' 和 ';
+                                param += '学院名称=' + schoolName + ' 和 ';
+                            }
+                            if (grade.length > 0) {
+                                param += '年级=' + grade + ' 和 ';
+                            }
+                            if (createTime.length > 0) {
+                                param += '导入时间=' + createTime + ' 和 ';
+                            }
+
+                            param = param.substring(0, param.lastIndexOf(' 和 '))
+
+                            $("#analysisParam").text(param);
+
+                            _this.importData = result.data;
+
+                            var studentNoAnalysis = result.data.studentNoAnalysis;
+                            var sexAnalysis = result.data.sexAnalysis;
+                            var schoolCodeAnalysis = result.data.schoolCodeAnalysis;
+                            var gradeAnalysis = result.data.gradeAnalysis;
+                            var commonAnalysis = result.data.commonAnalysis;
+
+
+                            if (studentNoAnalysis) {
+                                _this.initStation(studentNoAnalysis, "studentNo")
+                                _this.initTime(studentNoAnalysis, "studentNo")
+                                _this.initSituation(studentNoAnalysis);
+
+                            } else if (studentNo.length > 0) {
+                                _this.showStudentEmpty = true;
+                            }
+
+                            if (sexAnalysis) {
+                                _this.initStation(sexAnalysis, "sex")
+                                _this.initTime(sexAnalysis, "sex")
+                            }
+
+                            if (schoolCodeAnalysis) {
+                                _this.initStation(schoolCodeAnalysis, "schoolCode")
+                                _this.initTime(schoolCodeAnalysis, "schoolCode")
+                            }
+
+                            if (gradeAnalysis) {
+                                _this.initStation(gradeAnalysis, "grade")
+                                _this.initTime(gradeAnalysis, "grade")
+                            }
+
+                            if (commonAnalysis) {
+                                _this.initStation(commonAnalysis, "common")
+                                _this.initTime(commonAnalysis, "common")
+                            }
+                        } else {
+                            layer.msg("分析失败！", {icon: 2});
+                        }
+                    }
+                });
+
+            }
+            ,
+            /**
+             * 初始化消费地点echarts图
+             * @param analysisData 分析数据
+             * @param elementName 元素名
+             */
+            initStation: function (analysisData, elementName) {
+                // 基于准备好的dom，初始化echarts实例
+
+                $(function () {
+                    var stationChart = echarts.init(document.getElementById(elementName + '_station'));
+
+                    var seriesDataArray = [];
+
+                    // 指定图表的配置项和数据
+                    var stationPreference = analysisData.stationPreference;
+
+                    var legendList = [];
+
+                    for (var station in stationPreference) {
+
+                        var seriesData = {};
+                        seriesData.value = stationPreference[station];
+                        seriesData.name = station;
+                        if (seriesData.value > 0) {
+                            legendList.push(station);
+                            seriesDataArray.push(seriesData);
+                        }
+                    }
+
+                    var subtext = '';
+                    if (legendList.length < 10) {
+                        subtext = '学生饮食消费地点集中，请加强关注了解相应情况';
+                    } else {
+                        subtext = '学生饮食消费地点情况正常';
+                    }
+
+                    var stationOption = {
+                        title: {
+                            text: '消费地点偏好',
+                            subtext: subtext,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c} ({d}%)'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data: legendList
+                        },
+                        series: [
+                            {
+                                name: '学生编号',
+                                type: 'pie',
+                                radius: '55%',
+                                center: ['50%', '50%'],
+                                data: seriesDataArray,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    stationChart.setOption(stationOption, true);
+                });
+
+            }
+            ,
+            /**
+             * 初始化消费时间echarts图
+             * @param analysisData 分析数据
+             * @param elementName 元素名
+             */
+            initTime: function (analysisData, elementName) {
+                $(function () {
+                    // 基于准备好的dom，初始化echarts实例
+                    var timeChart = echarts.init(document.getElementById(elementName + '_time'));
+
+                    var seriesDataArray = [];
+
+                    // 指定图表的配置项和数据
+                    var timePreference = analysisData.timePreference;
+
+                    var legendList = [];
+
+                    for (var time in timePreference) {
+                        var seriesData = {};
+                        seriesData.value = timePreference[time];
+                        seriesData.name = time;
+                        if (seriesData.value > 0) {
+                            legendList.push(time);
+                            seriesDataArray.push(seriesData);
+                        }
+                    }
+
+                    var subtext = '';
+                    if (legendList.length > 4) {
+                        subtext = '学生饮食时间分散，饮食有不规律倾向，请及时关注情况';
+                    } else {
+                        subtext = '学生饮食情况基本规律，无异常倾向';
+                    }
+
+                    // 指定图表的配置项和数据
+                    var timeOption = {
+                        title: {
+                            text: '消费时间偏好',
+                            subtext: subtext,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c} ({d}%)'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data: legendList
+                        },
+                        series: [
+                            {
+                                name: '消费时间段',
+                                type: 'pie',
+                                radius: '55%',
+                                center: ['50%', '50%'],
+                                data: seriesDataArray,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    timeChart.setOption(timeOption, true);
+                });
+            }
+            ,
+            /**
+             * 初始化消费情况echarts图
+             * @param analysisData 分析数据
+             */
+            initSituation: function (analysisData) {
+                $(function () {
+
+                    // 基于准备好的dom，初始化echarts实例
+                    var situationChart = echarts.init(document.getElementById('studentNo_situation'));
+
+                    // 指定图表的配置项和数据
+                    var situationList = analysisData.situationList;
+
+                    var nameData = [];
+                    var valueData = [];
+
+                    $(situationList).each(function () {
+                        if (this.money > 0) {
+                            nameData.push(this.time);
+                            valueData.push(this.money);
+                        }
+                    });
+
+                    // 指定图表的配置项和数据
+                    var situationOption = {
+                        title: {
+                            text: '最近一周消费情况'
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross',
+                                label: {
+                                    backgroundColor: '#6a7985'
+                                }
+                            }
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: nameData
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: valueData,
+                            type: 'line'
+                        }]
+                    };
+
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    situationChart.setOption(situationOption, true);
+
+                });
+            }
+            ,
+            /**
+             * 初始化消费地点echarts图
+             * @param analysisData 分析数据
+             */
+            initLevel: function (analysisData) {
+                $(function () {
+
+                });
+            }
+        }
+    });
+
+    layui.use(['form', 'upload', 'layer'], function () {
+
+        var upload = layui.upload;
+        // 文件上传实例
+        var uploadInst = upload.render({
+            elem: '#uploadData' //绑定元素
+            , url: '/importLog/importData' //上传接口
+            , accept: 'file' // 允许上传的文件类型
+            , size: 1024 // 允许上传文件的最大体积,0表示无限制
+            , auto: true //选择文件后自动上传
+            , before: function (obj) {
+                //上传文件前的操作
+                // 显示加载弹窗
+                loading = layer.load();
+            }
+            , done: function (res) {
+                //上传完毕回调
+                if (loading) {
+                    // 关闭加载弹窗
+                    layer.close(loading);
+                }
+                if (res.code == 200) {
+
+                    layer.msg("导入成功！");
+                    //延时操作，增加用户体验
+                    setTimeout(function () {
+                        // 重新加载 页面的表格
+                        location.reload();
+                    }, 800);
+
+                } else {
+                    //请求异常回调
+                    layer.msg(res.msg, {icon: 2});
+                }
+
+            }
+            , error: function () {
+                // 关闭加载弹窗
+                layer.close(loading);
+                //请求异常回调
+                layer.msg('导入消费记录信息失败', {icon: 2});
+            }
+        });
+    });
+
+
+</script>
+</html>

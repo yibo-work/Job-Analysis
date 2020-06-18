@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.JobDao">
+
+    <select id="findById" resultType="com.model.Job">
+        select `id`,`year`,`stu_no`,`sex`,`after_graduation`,`real_company`,`company_location`,`company_under`,`company_nature`,`company_type`,`industry_nature`        from job
+        where id = #{id}
+    </select>
+
+    <select id="findByMap" resultType="com.model.Job">
+        select `id`,`year`,`stu_no`,`sex`,`after_graduation`,`real_company`,`company_location`,`company_under`,`company_nature`,`company_type`,`industry_nature`        from job
+        <where>
+                            <if test="id != null and id != ''">
+                    and id = #{id}
+                </if>
+                            <if test="year != null and year != ''">
+                    and year = #{year}
+                </if>
+                            <if test="stuNo != null and stuNo != ''">
+                    and stu_no = #{stuNo}
+                </if>
+                            <if test="sex != null and sex != ''">
+                    and sex = #{sex}
+                </if>
+                            <if test="afterGraduation != null and afterGraduation != ''">
+                    and after_graduation = #{afterGraduation}
+                </if>
+                            <if test="realCompany != null and realCompany != ''">
+                    and real_company = #{realCompany}
+                </if>
+                            <if test="companyLocation != null and companyLocation != ''">
+                    and company_location = #{companyLocation}
+                </if>
+                            <if test="companyUnder != null and companyUnder != ''">
+                    and company_under = #{companyUnder}
+                </if>
+                            <if test="companyNature != null and companyNature != ''">
+                    and company_nature = #{companyNature}
+                </if>
+                            <if test="companyType != null and companyType != ''">
+                    and company_type = #{companyType}
+                </if>
+                            <if test="industryNature != null and industryNature != ''">
+                    and industry_nature = #{industryNature}
+                </if>
+                    </where>
+    </select>
+
+    <select id="list" resultType="com.model.Job">
+        select `id`,`year`,`stu_no`,`sex`,`after_graduation`,`real_company`,`company_location`,`company_under`,`company_nature`,`company_type`,`industry_nature`        from job
+        <where>
+                            <if test="id != null and id != ''">and id =
+                    #{id}
+                </if>
+                            <if test="year != null and year != ''">and year =
+                    #{year}
+                </if>
+                            <if test="stuNo != null and stuNo != ''">and stu_no =
+                    #{stuNo}
+                </if>
+                            <if test="sex != null and sex != ''">and sex =
+                    #{sex}
+                </if>
+                            <if test="afterGraduation != null and afterGraduation != ''">and after_graduation =
+                    #{afterGraduation}
+                </if>
+                            <if test="realCompany != null and realCompany != ''">and real_company =
+                    #{realCompany}
+                </if>
+                            <if test="companyLocation != null and companyLocation != ''">and company_location =
+                    #{companyLocation}
+                </if>
+                            <if test="companyUnder != null and companyUnder != ''">and company_under =
+                    #{companyUnder}
+                </if>
+                            <if test="companyNature != null and companyNature != ''">and company_nature =
+                    #{companyNature}
+                </if>
+                            <if test="companyType != null and companyType != ''">and company_type =
+                    #{companyType}
+                </if>
+                            <if test="industryNature != null and industryNature != ''">and industry_nature =
+                    #{industryNature}
+                </if>
+                    </where>
+    </select>
+
+    <insert id="save" parameterType="com.model.Job"            useGeneratedKeys="true" keyProperty="id">
+        insert into job(<trim suffixOverrides=",">
+                                                        <if test="year != null">`year`,</if>
+                                                <if test="stuNo != null">`stu_no`,</if>
+                                                <if test="sex != null">`sex`,</if>
+                                                <if test="afterGraduation != null">`after_graduation`,</if>
+                                                <if test="realCompany != null">`real_company`,</if>
+                                                <if test="companyLocation != null">`company_location`,</if>
+                                                <if test="companyUnder != null">`company_under`,</if>
+                                                <if test="companyNature != null">`company_nature`,</if>
+                                                <if test="companyType != null">`company_type`,</if>
+                                                <if test="industryNature != null">`industry_nature`</if>
+                    </trim>)
+        values (<trim suffixOverrides=",">
+                                                        <if test="year != null">#{year},</if>
+                                                <if test="stuNo != null">#{stuNo},</if>
+                                                <if test="sex != null">#{sex},</if>
+                                                <if test="afterGraduation != null">#{afterGraduation},</if>
+                                                <if test="realCompany != null">#{realCompany},</if>
+                                                <if test="companyLocation != null">#{companyLocation},</if>
+                                                <if test="companyUnder != null">#{companyUnder},</if>
+                                                <if test="companyNature != null">#{companyNature},</if>
+                                                <if test="companyType != null">#{companyType},</if>
+                                                <if test="industryNature != null">#{industryNature}</if>
+                    </trim>)
+    </insert>
+
+    <update id="update" parameterType="com.model.Job">
+        update job
+        <set>
+                                                                            <if test="year != null">`year` = #{year}
+                        ,</if>
+                                                                <if test="stuNo != null">`stu_no` = #{stuNo}
+                        ,</if>
+                                                                <if test="sex != null">`sex` = #{sex}
+                        ,</if>
+                                                                <if test="afterGraduation != null">`after_graduation` = #{afterGraduation}
+                        ,</if>
+                                                                <if test="realCompany != null">`real_company` = #{realCompany}
+                        ,</if>
+                                                                <if test="companyLocation != null">`company_location` = #{companyLocation}
+                        ,</if>
+                                                                <if test="companyUnder != null">`company_under` = #{companyUnder}
+                        ,</if>
+                                                                <if test="companyNature != null">`company_nature` = #{companyNature}
+                        ,</if>
+                                                                <if test="companyType != null">`company_type` = #{companyType}
+                        ,</if>
+                                                                <if test="industryNature != null">`industry_nature` = #{industryNature}
+                        </if>
+                                    </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from job
+        where id = #{id}
+    </delete>
+
+</mapper>
