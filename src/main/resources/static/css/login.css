@@ -4,6 +4,12 @@
     overflow: hidden;
 }
 
+.register-bg {
+    background: url(../images/register_bg.jpg) no-repeat center;
+    background-size: cover;
+    overflow: hidden;
+}
+
 .login {
     margin: 120px auto 0 auto;
     min-height: 420px;
@@ -11,7 +17,6 @@
     padding: 40px;
     background-color: #ffffff;
     border-radius: 4px;
-    /* overflow-x: hidden; */
     box-sizing: border-box;
 }
 

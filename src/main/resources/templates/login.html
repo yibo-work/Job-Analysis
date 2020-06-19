@@ -19,11 +19,13 @@
     <div class="message">用户登录</div>
     <div id="darkbannerwrap"></div>
     <form class="layui-form" method="post" onsubmit="return false;">
-        <input class="layui-input" lay-verify="required" name="name" placeholder="姓名" type="text">
-        <hr class="hr15">
-        <input class="layui-input" lay-verify="required" name="password" placeholder="密码" type="password">
-        <hr class="hr15">
+        <input class="layui-input" lay-verify="required" name="name" placeholder="姓名" type="text"/>
+        <hr class="hr15"/>
+        <input class="layui-input" lay-verify="required" name="password" placeholder="密码" type="password"/>
+        <hr class="hr15"/>
         <input lay-filter="login" lay-submit onclick="login()" style="width:100%;" type="submit" value="登录">
+        <hr class="hr20"/>
+        <a class="right" style="float: right;text-decoration: underline" th:href="@{/register}">没有账号？去注册</a>
     </form>
 </div>
 

@@ -122,9 +122,6 @@ public class ImportLogServiceImpl implements ImportLogService {
             String schoolCode = strings.get(2);
             schoolCode = schoolCode.substring(0, schoolCode.indexOf("-"));
 
-            Map<String, Object> map = new HashMap<>();
-
-            map.put("code", schoolCode);
             //只取学院号
             importLog.setSchoolCode(schoolCode);
             importLog.setMoney(new BigDecimal(strings.get(3)));
@@ -252,7 +249,7 @@ public class ImportLogServiceImpl implements ImportLogService {
         }
 
         int nums = importLogList.size();
-        //消费总额
+        //就业总额
         double sumMoney = importLogList.stream().mapToDouble(importLog -> importLog.getMoney().doubleValue()).sum();
 
         Date startDate = importLogList.get(0).getTime();
@@ -270,24 +267,24 @@ public class ImportLogServiceImpl implements ImportLogService {
 
         int monthNum = monthSet.size();
 
-        //日均消费额
+        //日均就业额
         String dayUse = String.format("%.2f", sumMoney / betweenDay);
         resultMap.put("dayUse", dayUse);
 
-        // 月均消费额
+        // 月均就业额
         String monthUse = String.format("%.2f", sumMoney / monthNum);
         resultMap.put("monthUse", monthUse);
 
-        // 每日消费频率
+        // 每日就业频率
         String dayFrequency = String.format("%.2f", (double) nums / betweenDay);
 
-        //每月消费频率
+        //每月就业频率
         String monthFrequency = String.format("%.2f", (double) nums / monthNum);
 
         resultMap.put("dayFrequency", dayFrequency);
         resultMap.put("monthFrequency", monthFrequency);
 
-        //消费地点偏好
+        //就业地点偏好
         Map<String, Integer> stationMap = new HashMap<>(nums);
         importLogList.forEach(importLog -> {
 
@@ -326,7 +323,7 @@ public class ImportLogServiceImpl implements ImportLogService {
 
         resultMap.put("stationPreference", stationMap);
 
-        //消费时间偏好
+        //就业时间偏好
         Map<String, Integer> timeMap = new HashMap<>(nums);
         importLogList.forEach(importLog -> {
 
@@ -406,11 +403,11 @@ public class ImportLogServiceImpl implements ImportLogService {
     }
 
     /**
-     * 分析学生个人消费情况
+     * 分析学生个人就业情况
      */
     private Map<String, Object> analysisStudentData(List<ImportLog> studentList) {
         Map<String, Object> resultMap = new HashMap<>();
-        //学生消费的最后一天
+        //学生就业的最后一天
         Date endTime = studentList.get(studentList.size() - 1).getTime();
 
         Map<String, Object> paramMap = new HashMap<>();
@@ -436,7 +433,7 @@ public class ImportLogServiceImpl implements ImportLogService {
             List<ImportLog> canteenData = importLogDao.list(parameters);
 
             if (canteenData.isEmpty()) {
-                return ResultVOUtil.failure("分析失败，没有找到该学生的消费数据！");
+                return ResultVOUtil.failure("分析失败，没有找到该学生的就业数据！");
             }
 
             String station = String.valueOf(parameters.get("station"));
@@ -468,7 +465,7 @@ public class ImportLogServiceImpl implements ImportLogService {
             for (Map.Entry<String, Integer> entry : list) {
 
                 if (entry.getKey().equals(station)) {
-                    //消费人次在总店铺的排名
+                    //就业人次在总店铺的排名
                     stationMap.put("rankNo", i);
                 }
                 i++;
@@ -478,7 +475,7 @@ public class ImportLogServiceImpl implements ImportLogService {
             int nums = canteenData.size();
 
             stationMap.put("nums", nums);
-            //消费总额
+            //就业总额
             double sumMoney = canteenData.stream().mapToDouble(importLog -> importLog.getMoney().doubleValue()).sum();
 
             //计算时间包含多少自然月
@@ -490,11 +487,11 @@ public class ImportLogServiceImpl implements ImportLogService {
 
             int monthNum = monthSet.size();
 
-            // 月均消费额
+            // 月均就业额
             String monthUse = String.format("%.2f", sumMoney / monthNum);
             stationMap.put("monthUse", monthUse);
 
-            //人均消费金额
+            //人均就业金额
             String oneUser = String.format("%.2f", sumMoney / nums);
             stationMap.put("oneUser", oneUser);
 

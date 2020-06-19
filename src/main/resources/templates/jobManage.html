@@ -30,8 +30,16 @@
             <div class="layui-card">
 
                 <div class="layui-card-header">
-                    <button class="layui-btn" onclick="xadmin.open('添加就业','/jobAdd',500,700)">
+                    <button class="layui-btn" onclick="xadmin.open('添加就业','/jobAdd',500,800)">
                         <i class="layui-icon"></i>添加就业
+                    </button>
+
+                    <button class="layui-btn" id="uploadData">
+                        <i class="layui-icon layui-icon-upload"></i>导入就业数据
+                    </button>
+
+                    <button class="layui-btn layui-btn-danger" id="truncateData">
+                        <i class="layui-icon layui-icon-delete"></i>清空就业数据
                     </button>
                 </div>
                 <div class="layui-card-body">
@@ -69,14 +77,8 @@
                                 <button @click="editJob(job.id)"
                                         class="layui-btn layui-btn-warm"
                                         id="editJob"
-                                        onclick="xadmin.open('编辑就业','/jobEdit',500,700)">
+                                        onclick="xadmin.open('编辑就业','/jobEdit',500,800)">
                                     <i class="layui-icon">&#xe631;</i>编辑
-                                </button>
-                                <button @click="viewJob(job.id)"
-                                        class="layui-btn"
-                                        id="viewJob"
-                                        onclick="xadmin.open('就业详情','/jobView',500,700)">
-                                    <i class="layui-icon layui-icon-console"></i>详情
                                 </button>
                                 <button @click="delJob(job.id)"
                                         class="layui-btn layui-btn-danger"
@@ -119,9 +121,6 @@
 </div>
 </body>
 <script type="text/javascript">
-
-    layui.use(['form'], function () {
-    });
 
     vm = new Vue({
         el: "#vmJob",
@@ -181,20 +180,87 @@
             editJob: function (editJobId) {
                 //把要修改的editJobId存到sessionStorage中
                 sessionStorage.setItem("editJobId", editJobId);
-            },
-            /**
-             *
-             * 就业详情
-             */
-            viewJob: function (viewJobId) {
-                //把要修改的viewJobId存到sessionStorage中
-                sessionStorage.setItem("viewJobId", viewJobId);
             }
         },
         created: function () {
-            this.getPage(1, 5);
+            this.getPage(1, 10);
         }
     });
+
+    layui.use(['form', 'upload', 'layer'], function () {
+
+        var upload = layui.upload;
+        // 文件上传实例
+        var uploadInst = upload.render({
+            elem: '#uploadData' //绑定元素
+            , url: '/job/importData' //上传接口
+            , accept: 'file' // 允许上传的文件类型
+            , size: 1024 // 允许上传文件的最大体积,0表示无限制
+            , auto: true //选择文件后自动上传
+            , before: function (obj) {
+                //上传文件前的操作
+                // 显示加载弹窗
+                loading = layer.load();
+            }
+            , done: function (res) {
+                //上传完毕回调
+                if (loading) {
+                    // 关闭加载弹窗
+                    layer.close(loading);
+                }
+                if (res.code === 200) {
+                    layer.msg("导入成功！");
+                    //延时操作，增加用户体验
+                    setTimeout(function () {
+                        // 重新加载 页面的表格
+                        location.reload();
+                    }, 800);
+
+                } else {
+                    //请求异常回调
+                    layer.msg(res.msg, {icon: 2});
+                }
+
+            },
+            error: function () {
+                // 关闭加载弹窗
+                layer.close(loading);
+                //请求异常回调
+                layer.msg('导入就业记录信息失败', {icon: 2});
+            }
+        });
+
+
+        $("#truncateData").click(function(){
+
+            layer.confirm('确认要清空就业数据吗？',
+                function () {
+                    //发异步删除数据
+                    $.ajax({
+                        url: "/job/truncate",
+                        data: {
+                            id: id
+                        },
+                        dataType: "json",
+                        type: "delete",
+                        success: function (result) {
+                            if (result.code === 200) {
+                                layer.msg('删除成功', {
+                                    icon: 1,
+                                    time: 1000
+                                });
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 1000);
+                            } else {
+                                layer.alert(result.msg, {icon: 5});
+                            }
+                        }
+                    });
+
+                });
+        });
+    })
 
 </script>
 </html>

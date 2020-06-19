@@ -1,6 +1,7 @@
 package com.dao;
 
 import com.model.Job;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -43,4 +44,10 @@ public interface JobDao {
      */
     int deleteById(Integer id);
 
+    /**
+     * 批量导入
+     */
+    void bitchSave(@Param("jobList") List<Job> jobList);
+
+    void truncate();
 }

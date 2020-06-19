@@ -4894,8 +4894,7 @@
          * @return {module:zrender/animation/Animator}
          */
         when: function (time
-                        /* ms */
-            , props) {
+                        /* ms */, props) {
             var tracks = this._tracks;
 
             for (var propName in props) {

@@ -16,7 +16,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,18 +25,18 @@ public class XLSConvertCSVUtil implements HSSFListener {
     private static int targetSheetIndex;
     private static boolean readByIndex = true;
     private static int startRowNumber = 1;
-    boolean readThisSheet;
     private final List<List<String>> allRecords;
     private final String[] recordArray;
     private final POIFSFileSystem fs;
     private final boolean outputFormulaValues;
+    private final ArrayList boundSheetRecords;
+    boolean readThisSheet;
     private SheetRecordCollectingListener workbookBuildingListener;
     private HSSFWorkbook stubWorkbook;
     private SSTRecord sstRecord;
     private FormatTrackingHSSFListener formatListener;
     private int currentSheetIndex;
     private BoundSheetRecord[] orderedBSRs;
-    private final ArrayList boundSheetRecords;
     private int nextRow;
     private int nextColumn;
     private boolean outputNextStringRecord;
@@ -129,7 +128,8 @@ public class XLSConvertCSVUtil implements HSSFListener {
 
                 if (readByIndex) {
                     this.readThisSheet = targetSheetIndex - 1 == this.currentSheetIndex;
-                } else this.readThisSheet = targetSheetName.equalsIgnoreCase(this.orderedBSRs[this.currentSheetIndex].getSheetname());
+                } else
+                    this.readThisSheet = targetSheetName.equalsIgnoreCase(this.orderedBSRs[this.currentSheetIndex].getSheetname());
             } else {
                 this.readThisSheet = false;
             }

@@ -141,23 +141,17 @@
     <update id="update" parameterType="com.model.ImportLog">
         update import_log
         <set>
-            <if test="studentNo != null">`student_no` = #{studentNo}
-                ,
+            <if test="studentNo != null">`student_no` = #{studentNo},
             </if>
-            <if test="sex != null">`sex` = #{sex}
-                ,
+            <if test="sex != null">`sex` = #{sex},
             </if>
-            <if test="schoolCode != null">`school_code` = #{schoolCode}
-                ,
+            <if test="schoolCode != null">`school_code` = #{schoolCode},
             </if>
-            <if test="money != null">`money` = #{money}
-                ,
+            <if test="money != null">`money` = #{money},
             </if>
-            <if test="time != null">`time` = #{time}
-                ,
+            <if test="time != null">`time` = #{time},
             </if>
-            <if test="station != null">`station` = #{station}
-                ,
+            <if test="station != null">`station` = #{station},
             </if>
             <if test="createTime != null">`create_time` = #{createTime}
             </if>

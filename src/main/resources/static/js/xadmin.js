@@ -1,8 +1,6 @@
 ;!function (win) {
     "use strict";
-    var doc = document
-
-        , Xadmin = function () {
+    var doc = document, Xadmin = function () {
         this.v = '2.2'; //版本号
     };
 
@@ -58,10 +56,8 @@
 
     Xadmin.prototype.add_lay_tab = function (title, url, id) {
         element.tabAdd('xbs_tab', {
-            title: title
-            ,
-            content: '<iframe tab-id="' + id + '" frameborder="0" src="' + url + '" scrolling="yes" class="x-iframe"></iframe>'
-            ,
+            title: title,
+            content: '<iframe tab-id="' + id + '" frameborder="0" src="' + url + '" scrolling="yes" class="x-iframe"></iframe>',
             id: id
         })
     };
@@ -135,8 +131,7 @@
             return false;
 
         layui.data('tab_list', {
-            key: id
-            , value: {title: title, url: url}
+            key: id, value: {title: title, url: url}
         });
     };
 
@@ -170,8 +165,7 @@
             return false;
         if (typeof id != "undefined") {
             layui.data('tab_list', {
-                key: id
-                , remove: true
+                key: id, remove: true
             });
         } else {
             layui.data('tab_list', null);
@@ -190,8 +184,7 @@
         layui.data('tab_list', null);
 
         layui.data('tab_list', {
-            key: id
-            , value: tab_list[id]
+            key: id, value: tab_list[id]
         });
     };
     win.xadmin = new Xadmin();

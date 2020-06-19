@@ -2,20 +2,24 @@ spring:
   # database
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/job_analysis?serverTimezone=Asia/Shanghai&useSSL=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://127.0.0.1:3316/job_analysis?serverTimezone=Asia/Shanghai&useSSL=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
     password: root
     username: root
   mvc:
     static-path-pattern: /**
   resources:
     static-locations: classpath:/static
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
 #port
 server:
   port: 9015
   servlet:
     session:
-      # session过期时间 十分钟
-      timeout: 600s
+      # session过期时间 不过期
+      timeout: -1
 # mybatis
 mybatis:
   mapper-locations: classpath:/mapper/*.xml

@@ -1,14 +1,18 @@
 package com.controller;
 
+import com.enums.ResultFailureEnum;
 import com.github.pagehelper.PageInfo;
 import com.model.Job;
 import com.service.JobService;
+import com.utils.FileUtil;
 import com.utils.RequestParamsUtil;
 import com.utils.ResultVOUtil;
 import com.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -99,5 +103,33 @@ public class JobController {
             return ResultVOUtil.failure("删除失败！");
         }
     }
+/**
+     * 删除就业
+     */
+    @DeleteMapping("/truncate")
+    public ResultVO truncate() {
+        try {
+            jobService.truncate();
+            return ResultVOUtil.success();
+        } catch (Exception ex) {
+            return ResultVOUtil.failure("删除失败！");
+        }
+    }
 
+    /**
+     * 导入数据
+     */
+    @PostMapping("/importData")
+    public ResultVO importData(MultipartFile file) {
+        try {
+            //文件上传
+            FileUtil.uploadFile(file.getBytes(), FileUtil.UPLOAD_PATH + file.getOriginalFilename());
+            return jobService.importData(new File(FileUtil.UPLOAD_PATH + file.getOriginalFilename()));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.err.println(ex.getMessage());
+            return ResultVOUtil.failure(ResultFailureEnum.IMPORT_ERROR);
+        }
+
+    }
 }

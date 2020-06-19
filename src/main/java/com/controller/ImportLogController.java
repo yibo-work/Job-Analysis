@@ -135,7 +135,7 @@ public class ImportLogController {
     }
 
     /**
-     * 分析学生消费数据
+     * 分析学生就业数据
      */
     @GetMapping("/getAnalysisCanteen")
     public ResultVO analysisCanteen() {

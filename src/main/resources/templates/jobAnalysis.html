@@ -106,7 +106,7 @@
                                 <i class="layui-icon layui-icon-refresh"></i>重置
                             </button>
                             <button class="layui-btn" id="uploadData">
-                                <i class="layui-icon"></i>导入消费数据
+                                <i class="layui-icon"></i>导入就业数据
                             </button>
                         </div>
                     </form>
@@ -124,68 +124,68 @@
                 <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>日均消费额</h3>
+                            <h3>日均就业额</h3>
                             <p>
                                 <cite v-text="importData.studentNoAnalysis.dayUse"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.studentNoAnalysis.dayUse > 60">
-                                        日均消费水平过高，建议提醒学生更合理适当地消费
+                                        日均就业水平过高，建议提醒学生更合理适当地就业
                                     </span>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-else-if="importData.studentNoAnalysis.dayUse < 10">
-                                        学生在学生的日均消费过低，建议关心学生最近的消费情况，是否有不良反应
+                                        学生在学生的日均就业过低，建议关心学生最近的就业情况，是否有不良反应
                                     </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                        学生消费基本正常
+                                        学生就业基本正常
                                     </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>月均消费额</h3>
+                            <h3>月均就业额</h3>
                             <p>
                                 <cite v-text="importData.studentNoAnalysis.monthUse"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.studentNoAnalysis.monthUse > 1000">
-                                月消费水平过高，建议提醒学生更合理消费
+                                月就业水平过高，建议提醒学生更合理就业
                             </span>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-else-if="importData.studentNoAnalysis.monthUse < 200">
-                                学生在学生的消费过低，建议关心学生最近的消费情况，是否有特殊原因
+                                学生在学生的就业过低，建议关心学生最近的就业情况，是否有特殊原因
                             </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                学生消费基本正常
+                                学生就业基本正常
                             </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>日消费频率</h3>
+                            <h3>日就业频率</h3>
                             <p>
                                 <cite v-text="importData.studentNoAnalysis.dayFrequency"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.studentNoAnalysis.dayFrequency < 1">
-                                学生每天饮食消费异常，请及时关心了解情况
+                                学生每天饮食就业异常，请及时关心了解情况
                             </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                学生消费基本正常
+                                学生就业基本正常
                             </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>月消费频率</h3>
+                            <h3>月就业频率</h3>
                             <p>
                                 <cite v-text="importData.studentNoAnalysis.monthFrequency"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.studentNoAnalysis.monthFrequency < 30">
-                                    学生饮食消费异常，请及时关心了解情况
+                                    学生饮食就业异常，请及时关心了解情况
                                 </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                    学生消费基本正常
+                                    学生就业基本正常
                                 </span>
                             </p>
                         </a>
@@ -247,7 +247,7 @@
         <div class="layui-card" v-else-if="showStudentEmpty">
             <div class="layui-card-header">学生个人分析</div>
             <div class="layui-card-body" style="font-size: 18px;color: #FFB800">
-                无该生消费数据!
+                无该生就业数据!
             </div>
         </div>
         <div class="layui-card" v-if="!importData.studentNoAnalysis && !showStudentEmpty && importData.sexAnalysis">
@@ -256,68 +256,68 @@
                 <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>日均消费额</h3>
+                            <h3>日均就业额</h3>
                             <p>
                                 <cite v-text="importData.sexAnalysis.dayUse"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.sexAnalysis.dayUse > 60">
-                                        日均消费水平过高，建议提醒学生更合理适当地消费
+                                        日均就业水平过高，建议提醒学生更合理适当地就业
                                     </span>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-else-if="importData.sexAnalysis.dayUse < 10">
-                                        学生在学生的日均消费过低，建议关心学生最近的消费情况，是否有不良反应
+                                        学生在学生的日均就业过低，建议关心学生最近的就业情况，是否有不良反应
                                     </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                        学生消费基本正常
+                                        学生就业基本正常
                                     </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>月均消费额</h3>
+                            <h3>月均就业额</h3>
                             <p>
                                 <cite v-text="importData.sexAnalysis.monthUse"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.sexAnalysis.monthUse > 1000">
-                                月消费水平过高，建议提醒学生更合理消费
+                                月就业水平过高，建议提醒学生更合理就业
                             </span>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-else-if="importData.sexAnalysis.monthUse < 200">
-                                学生在学生的消费过低，建议关心学生最近的消费情况，是否有特殊原因
+                                学生在学生的就业过低，建议关心学生最近的就业情况，是否有特殊原因
                             </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                学生消费基本正常
+                                学生就业基本正常
                             </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>日消费频率</h3>
+                            <h3>日就业频率</h3>
                             <p>
                                 <cite v-text="importData.sexAnalysis.dayFrequency"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.sexAnalysis.dayFrequency < 1">
-                                学生每天饮食消费异常，请及时关心了解情况
+                                学生每天饮食就业异常，请及时关心了解情况
                             </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                学生消费基本正常
+                                学生就业基本正常
                             </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>月消费频率</h3>
+                            <h3>月就业频率</h3>
                             <p>
                                 <cite v-text="importData.sexAnalysis.monthFrequency"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.sexAnalysis.monthFrequency < 30">
-                                    学生饮食消费异常，请及时关心了解情况
+                                    学生饮食就业异常，请及时关心了解情况
                                 </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                    学生消费基本正常
+                                    学生就业基本正常
                                 </span>
                             </p>
                         </a>
@@ -375,68 +375,68 @@
                 <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>日均消费额</h3>
+                            <h3>日均就业额</h3>
                             <p>
                                 <cite v-text="importData.schoolCodeAnalysis.dayUse"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.schoolCodeAnalysis.dayUse > 60">
-                                        日均消费水平过高，建议提醒学生更合理适当地消费
+                                        日均就业水平过高，建议提醒学生更合理适当地就业
                                     </span>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-else-if="importData.schoolCodeAnalysis.dayUse < 10">
-                                        学生在学生的日均消费过低，建议关心学生最近的消费情况，是否有不良反应
+                                        学生在学生的日均就业过低，建议关心学生最近的就业情况，是否有不良反应
                                     </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                        学生消费基本正常
+                                        学生就业基本正常
                                     </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>月均消费额</h3>
+                            <h3>月均就业额</h3>
                             <p>
                                 <cite v-text="importData.schoolCodeAnalysis.monthUse"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.schoolCodeAnalysis.monthUse > 1000">
-                                月消费水平过高，建议提醒学生更合理消费
+                                月就业水平过高，建议提醒学生更合理就业
                             </span>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-else-if="importData.schoolCodeAnalysis.monthUse < 200">
-                                学生在学生的消费过低，建议关心学生最近的消费情况，是否有特殊原因
+                                学生在学生的就业过低，建议关心学生最近的就业情况，是否有特殊原因
                             </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                学生消费基本正常
+                                学生就业基本正常
                             </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>日消费频率</h3>
+                            <h3>日就业频率</h3>
                             <p>
                                 <cite v-text="importData.schoolCodeAnalysis.dayFrequency"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.schoolCodeAnalysis.dayFrequency < 1">
-                                学生每天饮食消费异常，请及时关心了解情况
+                                学生每天饮食就业异常，请及时关心了解情况
                             </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                学生消费基本正常
+                                学生就业基本正常
                             </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>月消费频率</h3>
+                            <h3>月就业频率</h3>
                             <p>
                                 <cite v-text="importData.schoolCodeAnalysis.monthFrequency"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.schoolCodeAnalysis.monthFrequency < 30">
-                                    学生饮食消费异常，请及时关心了解情况
+                                    学生饮食就业异常，请及时关心了解情况
                                 </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                    学生消费基本正常
+                                    学生就业基本正常
                                 </span>
                             </p>
                         </a>
@@ -493,68 +493,68 @@
                 <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>日均消费额</h3>
+                            <h3>日均就业额</h3>
                             <p>
                                 <cite v-text="importData.gradeAnalysis.dayUse"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.gradeAnalysis.dayUse > 60">
-                                        日均消费水平过高，建议提醒学生更合理适当地消费
+                                        日均就业水平过高，建议提醒学生更合理适当地就业
                                     </span>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-else-if="importData.gradeAnalysis.dayUse < 10">
-                                        学生在学生的日均消费过低，建议关心学生最近的消费情况，是否有不良反应
+                                        学生在学生的日均就业过低，建议关心学生最近的就业情况，是否有不良反应
                                     </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                        学生消费基本正常
+                                        学生就业基本正常
                                     </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>月均消费额</h3>
+                            <h3>月均就业额</h3>
                             <p>
                                 <cite v-text="importData.gradeAnalysis.monthUse"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.gradeAnalysis.monthUse > 1000">
-                                月消费水平过高，建议提醒学生更合理消费
+                                月就业水平过高，建议提醒学生更合理就业
                             </span>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-else-if="importData.gradeAnalysis.monthUse < 200">
-                                学生在学生的消费过低，建议关心学生最近的消费情况，是否有特殊原因
+                                学生在学生的就业过低，建议关心学生最近的就业情况，是否有特殊原因
                             </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                学生消费基本正常
+                                学生就业基本正常
                             </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>日消费频率</h3>
+                            <h3>日就业频率</h3>
                             <p>
                                 <cite v-text="importData.gradeAnalysis.dayFrequency"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.gradeAnalysis.dayFrequency < 1">
-                                学生每天饮食消费异常，请及时关心了解情况
+                                学生每天饮食就业异常，请及时关心了解情况
                             </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                学生消费基本正常
+                                学生就业基本正常
                             </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>月消费频率</h3>
+                            <h3>月就业频率</h3>
                             <p>
                                 <cite v-text="importData.gradeAnalysis.monthFrequency"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.gradeAnalysis.monthFrequency < 30">
-                                    学生饮食消费异常，请及时关心了解情况
+                                    学生饮食就业异常，请及时关心了解情况
                                 </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                    学生消费基本正常
+                                    学生就业基本正常
                                 </span>
                             </p>
                         </a>
@@ -611,68 +611,68 @@
                 <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>日均消费额</h3>
+                            <h3>日均就业额</h3>
                             <p>
                                 <cite v-text="importData.commonAnalysis.dayUse"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.commonAnalysis.dayUse > 60">
-                                        日均消费水平过高，建议提醒学生更合理适当地消费
+                                        日均就业水平过高，建议提醒学生更合理适当地就业
                                     </span>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-else-if="importData.commonAnalysis.dayUse < 10">
-                                        学生在学生的日均消费过低，建议关心学生最近的消费情况，是否有不良反应
+                                        学生在学生的日均就业过低，建议关心学生最近的就业情况，是否有不良反应
                                     </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                        学生消费基本正常
+                                        学生就业基本正常
                                     </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>月均消费额</h3>
+                            <h3>月均就业额</h3>
                             <p>
                                 <cite v-text="importData.commonAnalysis.monthUse"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.commonAnalysis.monthUse > 1000">
-                                月消费水平过高，建议提醒学生更合理消费
+                                月就业水平过高，建议提醒学生更合理就业
                             </span>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-else-if="importData.commonAnalysis.monthUse < 200">
-                                学生在学生的消费过低，建议关心学生最近的消费情况，是否有特殊原因
+                                学生在学生的就业过低，建议关心学生最近的就业情况，是否有特殊原因
                             </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                学生消费基本正常
+                                学生就业基本正常
                             </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>日消费频率</h3>
+                            <h3>日就业频率</h3>
                             <p>
                                 <cite v-text="importData.commonAnalysis.dayFrequency"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.commonAnalysis.dayFrequency < 1">
-                                学生每天饮食消费异常，请及时关心了解情况
+                                学生每天饮食就业异常，请及时关心了解情况
                             </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                学生消费基本正常
+                                学生就业基本正常
                             </span>
                             </p>
                         </a>
                     </li>
                     <li class="layui-col-md6 layui-col-xs6">
                         <a class="x-admin-backlog-body" href="javascript:">
-                            <h3>月消费频率</h3>
+                            <h3>月就业频率</h3>
                             <p>
                                 <cite v-text="importData.commonAnalysis.monthFrequency"></cite>
                                 <span style="font-size: 14px; color:#FFB800"
                                       v-if="importData.commonAnalysis.monthFrequency < 30">
-                                    学生饮食消费异常，请及时关心了解情况
+                                    学生饮食就业异常，请及时关心了解情况
                                 </span>
                                 <span style="font-size: 14px; color:green" v-else>
-                                    学生消费基本正常
+                                    学生就业基本正常
                                 </span>
                             </p>
                         </a>
@@ -888,10 +888,9 @@
                     }
                 });
 
-            }
-            ,
+            },
             /**
-             * 初始化消费地点echarts图
+             * 初始化就业地点echarts图
              * @param analysisData 分析数据
              * @param elementName 元素名
              */
@@ -921,14 +920,14 @@
 
                     var subtext = '';
                     if (legendList.length < 10) {
-                        subtext = '学生饮食消费地点集中，请加强关注了解相应情况';
+                        subtext = '学生饮食就业地点集中，请加强关注了解相应情况';
                     } else {
-                        subtext = '学生饮食消费地点情况正常';
+                        subtext = '学生饮食就业地点情况正常';
                     }
 
                     var stationOption = {
                         title: {
-                            text: '消费地点偏好',
+                            text: '就业地点偏好',
                             subtext: subtext,
                             left: 'center'
                         },
@@ -963,10 +962,9 @@
                     stationChart.setOption(stationOption, true);
                 });
 
-            }
-            ,
+            },
             /**
-             * 初始化消费时间echarts图
+             * 初始化就业时间echarts图
              * @param analysisData 分析数据
              * @param elementName 元素名
              */
@@ -1002,7 +1000,7 @@
                     // 指定图表的配置项和数据
                     var timeOption = {
                         title: {
-                            text: '消费时间偏好',
+                            text: '就业时间偏好',
                             subtext: subtext,
                             left: 'center'
                         },
@@ -1017,7 +1015,7 @@
                         },
                         series: [
                             {
-                                name: '消费时间段',
+                                name: '就业时间段',
                                 type: 'pie',
                                 radius: '55%',
                                 center: ['50%', '50%'],
@@ -1036,10 +1034,9 @@
                     // 使用刚指定的配置项和数据显示图表。
                     timeChart.setOption(timeOption, true);
                 });
-            }
-            ,
+            },
             /**
-             * 初始化消费情况echarts图
+             * 初始化就业情况echarts图
              * @param analysisData 分析数据
              */
             initSituation: function (analysisData) {
@@ -1064,7 +1061,7 @@
                     // 指定图表的配置项和数据
                     var situationOption = {
                         title: {
-                            text: '最近一周消费情况'
+                            text: '最近一周就业情况'
                         },
                         tooltip: {
                             trigger: 'axis',
@@ -1093,10 +1090,9 @@
                     situationChart.setOption(situationOption, true);
 
                 });
-            }
-            ,
+            },
             /**
-             * 初始化消费地点echarts图
+             * 初始化就业地点echarts图
              * @param analysisData 分析数据
              */
             initLevel: function (analysisData) {
@@ -1143,14 +1139,16 @@
                 }
 
             }
-            , error: function () {
+
+            ,
+            error: function () {
                 // 关闭加载弹窗
                 layer.close(loading);
                 //请求异常回调
-                layer.msg('导入消费记录信息失败', {icon: 2});
+                layer.msg('导入就业记录信息失败', {icon: 2});
             }
         });
-    });
+    })
 
 
 </script>

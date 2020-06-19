@@ -37,17 +37,17 @@ public class ImportLog implements Serializable {
     private String schoolCode;
 
     /**
-     * 消费金额
+     * 就业金额
      */
     private BigDecimal money;
 
     /**
-     * 消费时间
+     * 就业时间
      */
     private Date time;
 
     /**
-     * 消费地点
+     * 就业地点
      */
     private String station;
 

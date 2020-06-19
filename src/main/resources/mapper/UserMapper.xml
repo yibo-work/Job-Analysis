@@ -67,8 +67,7 @@
         update user
         <set>
             <if test="name != null">
-                `name` = #{name}
-                ,
+                `name` = #{name},
             </if>
             <if test="password != null">
                 `password` = #{password}

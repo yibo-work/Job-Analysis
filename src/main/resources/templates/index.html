@@ -29,12 +29,9 @@
     <ul class="layui-nav right">
         <li class="layui-nav-item">
             <a href="javascript:void(0)">
-                【<span th:if="${session.USER.roleId == 1}">管理员</span>
-                <span th:if="${session.USER.roleId == 2}">教师</span>】<span
-                    th:text="${session.USER.name}">admin</span></a>
+                <span
+                        th:text="${session.USER.name}">admin</span></a>
             <dl class="layui-nav-child">
-                <dd>
-                    <a onclick="xadmin.open('修改个人信息','/editMine',500,400)">修改个人信息</a></dd>
                 <dd>
                     <a onclick="xadmin.open('修改密码','/editPassword',500,400)">修改密码</a></dd>
                 <dd>
@@ -49,6 +46,19 @@
 <div class="left-nav">
     <div id="side-nav">
         <ul class="active" id="nav">
+            <li class="open">
+                <a href="javascript:void(0)">
+                    <i class="iconfont left-nav-li" lay-tips="就业数据管理">&#xe726;</i>
+                    <cite>就业数据管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu" style="display: block;">
+                    <li>
+                        <a onclick="xadmin.add_tab('就业数据管理','jobManage')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>就业数据管理</cite></a>
+                    </li>
+                </ul>
+            </li>
             <li class="open">
                 <a href="javascript:void(0)">
                     <i class="iconfont left-nav-li" lay-tips="数据分析">&#xe726;</i>

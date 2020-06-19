@@ -4,16 +4,13 @@ import com.enums.ResultFailureEnum;
 import com.github.pagehelper.PageInfo;
 import com.model.User;
 import com.service.UserService;
-import com.utils.FileUtil;
 import com.utils.RequestParamsUtil;
 import com.utils.ResultVOUtil;
 import com.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +47,21 @@ public class UserController {
     public void loginOut(HttpSession session) {
         session.removeAttribute("USER");
         session.invalidate();
+    }
+
+    @RequestMapping("/register")
+    public ResultVO register(@RequestBody User user, HttpSession session) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", user.getName());
+        User findUser = userService.findByMap(map);
+        if (findUser != null) {
+            return ResultVOUtil.failure(ResultFailureEnum.REGISTER_ERROR);
+        } else {
+            userService.save(user);
+            session.setAttribute("USER", user);
+            return ResultVOUtil.success();
+        }
+
     }
 
 

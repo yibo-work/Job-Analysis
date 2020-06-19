@@ -18,10 +18,8 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body ">
-                    <blockquote class="layui-elem-quote">欢迎【<span style="color: blue"
-                                                                  th:if="${session.USER.roleId == 1}">管理员</span><span
-                            style="color: blue" th:if="${session.USER.roleId == 2}">教师</span>】：
-                        <span class="x-red" th:text="${session.USER.userNo}">test</span>！
+                    <blockquote class="layui-elem-quote">欢迎
+                        <span class="x-red" th:text="${session.USER.name}">test</span>！
                     </blockquote>
                 </div>
             </div>
@@ -36,98 +34,25 @@
                     <span style="font-size: 16px;font-weight: bold">项目介绍</span>
                 </div>
                 <div class="layui-card-body" style="padding-top: 30px; height: 300px; font-size: 18px">
-                    学生就业分析系统是一个针对高校学生的智能分析系统，它可以通过对学生在学生消费的一卡通数据对学生的消费情况进行分析，并相应的提出建议，方便教师掌握学生的学生消费动态、消费情况、消费水平，优化校园学生管理运行水平。
+                    学生就业分析系统是一个针对高校学生就业的智能分析系统
                 </div>
             </div>
         </div>
         <div class="layui-col-md6">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    <span style="font-size: 16px;font-weight: bold">个人信息</span>
+                    <span style="font-size: 16px;font-weight: bold">技术介绍</span>
                 </div>
-                <div class="layui-card-body" style="padding-top: 30px; height: 300px">
-                    <form class="layui-form">
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">
-                                工号
-                            </label>
-                            <div class="layui-input-block">
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <div style="line-height: 38px" v-text="user.userNo"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">
-                                姓名
-                            </label>
-                            <div class="layui-input-block">
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <div style="line-height: 38px" v-text="user.name"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">
-                                电话
-                            </label>
-                            <div class="layui-input-block">
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <div style="line-height: 38px" v-text="user.phone"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">
-                                邮箱
-                            </label>
-                            <div class="layui-input-block">
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <div style="line-height: 38px" v-text="user.email"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                <div class="layui-card-body" style="padding-top: 30px; height: 300px; font-size: 18px">
+                    <div style="line-height: 40px">1. 后台框架：Springboot</div>
+                    <div style="line-height: 40px">2. 数据库：Mysql</div>
+                    <div style="line-height: 40px">3. ORM框架：Mybatis</div>
+                    <div style="line-height: 40px">4. 开发工具：IntelliJ IDEA 2020.1</div>
+                    <div style="line-height: 40px">5. 图表：Echarts</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 </body>
-<script charset="UTF-8" th:inline="javascript" type="text/javascript">
-    var viewUser = [[${session.USER}]];
-    vm = new Vue({
-        el: "#vmUserDetail",
-        data: {
-            user: {}
-        },
-        methods: {},
-        created: function () {
-            var _this = this;
-            $.ajax({
-                url: "/user/findById",
-                data: {
-                    "id": viewUser.id
-                },
-                dataType: "json",
-                type: "get",
-                success: function (result) {
-                    if (result.code === 200) {
-                        _this.user = result.data;
-                    } else {
-                        layer.alert("获取用户信息失败！");
-                    }
-                }
-            });
-
-        }
-    });
-    layui.use(['form', 'layer', 'laydate'], function () {
-
-        var form = layui.form,
-            layer = layui.layer,
-            laydate = layui.laydate;
-
-    });
-</script>
 </html>

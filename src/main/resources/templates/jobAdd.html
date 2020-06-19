@@ -23,9 +23,15 @@
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-
-                        <input class="layui-input" id="year" name="year"
-                               type="text">
+                        <select class="layui-select" id="year" lay-verify="required" name="year">
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -35,8 +41,7 @@
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-
-                        <input class="layui-input" id="stuNo" name="stuNo"
+                        <input class="layui-input" id="stuNo" lay-verify="required" name="stuNo"
                                type="text">
                     </div>
                 </div>
@@ -47,9 +52,10 @@
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-
-                        <input class="layui-input" id="sex" name="sex"
-                               type="text">
+                        <select class="layui-select" id="sex" lay-verify="required" name="sex">
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -59,19 +65,24 @@
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-
-                        <input class="layui-input" id="afterGraduation" name="afterGraduation"
-                               type="text">
+                        <select class="layui-select" id="afterGraduation" lay-verify="required" name="afterGraduation">
+                            <option value="签约就业">签约就业</option>
+                            <option value="灵活就业">灵活就业</option>
+                            <option value="非派遣/劳动合同">非派遣/劳动合同</option>
+                            <option value="考取升学">考取升学</option>
+                            <option value="保送升学">保送升学</option>
+                            <option value="出国学习">出国学习</option>
+                            <option value="其他">其他</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label" for="realCompany">
-                    <span class="x-red">*</span>实际单位
+                    实际单位
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-
                         <input class="layui-input" id="realCompany" name="realCompany"
                                type="text">
                     </div>
@@ -83,8 +94,7 @@
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-
-                        <input class="layui-input" id="companyLocation" name="companyLocation"
+                        <input class="layui-input" id="companyLocation" lay-verify="required" name="companyLocation"
                                type="text">
                     </div>
                 </div>
@@ -95,8 +105,7 @@
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-
-                        <input class="layui-input" id="companyUnder" name="companyUnder"
+                        <input class="layui-input" id="companyUnder" lay-verify="required" name="companyUnder"
                                type="text">
                     </div>
                 </div>
@@ -108,18 +117,17 @@
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
 
-                        <input class="layui-input" id="companyNature" name="companyNature"
+                        <input class="layui-input" id="companyNature" lay-verify="required" name="companyNature"
                                type="text">
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label" for="companyType">
-                    <span class="x-red">*</span>单位类型
+                    单位类型
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-
                         <input class="layui-input" id="companyType" name="companyType"
                                type="text">
                     </div>
@@ -127,11 +135,10 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label" for="industryNature">
-                    <span class="x-red">*</span>行业性质
+                    行业性质
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-
                         <input class="layui-input" id="industryNature" name="industryNature"
                                type="text">
                     </div>

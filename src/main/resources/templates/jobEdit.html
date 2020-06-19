@@ -45,29 +45,41 @@
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-                        <input class="layui-input" id="sex" lay-verify="required" name="sex" type="text"
-                               v-model="job.sex"></div>
+                        <select class="layui-select" id="sex" lay-verify="required" name="sex" v-model="job.sex">
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-
             <div class="layui-form-item">
                 <label class="layui-form-label" for="afterGraduation">
                     <span class="x-red">*</span>毕业去向
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-                        <input class="layui-input" id="afterGraduation" lay-verify="required" name="afterGraduation"
-                               type="text" v-model="job.afterGraduation"></div>
+                        <select class="layui-input layui-select" id="afterGraduation" lay-verify="required"
+                                name="afterGraduation" v-model="job.afterGraduation">
+                            <option value="签约就业">签约就业</option>
+                            <option value="灵活就业">灵活就业</option>
+                            <option value="非派遣/劳动合同">非派遣/劳动合同</option>
+                            <option value="考取升学">考取升学</option>
+                            <option value="保送升学">保送升学</option>
+                            <option value="出国学习">出国学习</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label" for="realCompany">
-                    <span class="x-red">*</span>实际单位
+                    实际单位
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-                        <input class="layui-input" id="realCompany" lay-verify="required" name="realCompany" type="text"
+                        <input class="layui-input" id="realCompany" name="realCompany"
+                               type="text"
                                v-model="job.realCompany"></div>
                 </div>
             </div>
@@ -78,7 +90,8 @@
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-                        <input class="layui-input" id="companyLocation" lay-verify="required" name="companyLocation"
+                        <input class="layui-input" id="companyLocation" lay-verify="required"
+                               name="companyLocation"
                                type="text" v-model="job.companyLocation"></div>
                 </div>
             </div>
@@ -107,22 +120,24 @@
 
             <div class="layui-form-item">
                 <label class="layui-form-label" for="companyType">
-                    <span class="x-red">*</span>单位类型
+                    单位类型
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-                        <input class="layui-input" id="companyType" lay-verify="required" name="companyType" type="text"
+                        <input class="layui-input" id="companyType" name="companyType"
+                               type="text"
                                v-model="job.companyType"></div>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label" for="industryNature">
-                    <span class="x-red">*</span>行业性质
+                    行业性质
                 </label>
                 <div class="layui-input-block">
                     <div class="layui-input-inline layui-show-xs-block">
-                        <input class="layui-input" id="industryNature" lay-verify="required" name="industryNature"
+                        <input class="layui-input" id="industryNature"
+                               name="industryNature"
                                type="text" v-model="job.industryNature"></div>
                 </div>
             </div>

@@ -3,7 +3,9 @@ package com.service;
 import com.github.pagehelper.PageInfo;
 import com.model.Job;
 import com.utils.RequestParamsUtil;
+import com.vo.ResultVO;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -51,4 +53,10 @@ public interface JobService {
      */
     int deleteById(Integer id);
 
+    /**
+     * 导入数据
+     */
+    ResultVO importData(File targetFile) throws Exception;
+
+    void truncate();
 }
