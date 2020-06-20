@@ -1,6 +1,7 @@
 package com.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.dao.JobDao;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -177,12 +178,7 @@ public class JobServiceImpl implements JobService {
 
         jobList.forEach(job -> {
             String key = job.getAfterGraduation();
-            Integer val = afterGraduationData.get(key);
-            if (val == null) {
-                afterGraduationData.put(key, 0);
-            } else {
-                afterGraduationData.put(key, val + 1);
-            }
+            afterGraduationData.merge(key, 1, Integer::sum);
         });
 
         resultMap.put("afterGraduationData", afterGraduationData);
@@ -193,7 +189,13 @@ public class JobServiceImpl implements JobService {
             String key = job.getYear();
             int[] val = yearData.get(key);
             if (val == null) {
-                yearData.put(key, new int[2]);
+                val = new int[2];
+                if ("男".equals(job.getSex())) {
+                    val[0] = val[0] + 1;
+                } else if ("女".equals(job.getSex())) {
+                    val[1] = val[1] + 1;
+                }
+                yearData.put(key, val);
             } else {
                 if ("男".equals(job.getSex())) {
                     val[0] = val[0] + 1;
@@ -205,6 +207,74 @@ public class JobServiceImpl implements JobService {
         });
 
         resultMap.put("yearData", yearData);
+
+        Map<String, int[]> yearAfterData = new HashMap<>();
+
+        List<String> afterList = new ArrayList<>(afterGraduationData.keySet());
+
+        jobList.forEach(job -> {
+            String key = job.getYear();
+            int[] val = yearAfterData.get(key);
+            if (val == null) {
+                val = new int[afterList.size()];
+                for (int i = 0; i < afterList.size(); i++) {
+                    if (afterList.get(i).equals(job.getAfterGraduation())) {
+                        val[i] = val[i] + 1;
+                    }
+                }
+                yearAfterData.put(key, val);
+            } else {
+
+                for (int i = 0; i < afterList.size(); i++) {
+                    if (afterList.get(i).equals(job.getAfterGraduation())) {
+                        val[i] = val[i] + 1;
+                    }
+                }
+                yearAfterData.put(key, val);
+            }
+        });
+
+        resultMap.put("afterList", afterList);
+        resultMap.put("yearAfterData", yearAfterData);
+
+        List<Integer> maleArr = new ArrayList<>();
+        List<Integer> femaleArr = new ArrayList<>();
+
+        Map<String, int[]> industryNatureData = new HashMap<>();
+        jobList.forEach(job -> {
+            String key = job.getIndustryNature();
+
+            if (StrUtil.isNotBlank(key)) {
+                int[] val = industryNatureData.get(key);
+                if (val == null) {
+                    val = new int[2];
+                    if ("男".equals(job.getSex())) {
+                        val[0] = val[0] + 1;
+                    } else if ("女".equals(job.getSex())) {
+                        val[1] = val[1] + 1;
+                    }
+                    industryNatureData.put(key, val);
+                } else {
+                    if ("男".equals(job.getSex())) {
+                        val[0] = val[0] + 1;
+                    } else if ("女".equals(job.getSex())) {
+                        val[1] = val[1] + 1;
+                    }
+                    industryNatureData.put(key, val);
+                }
+            }
+
+        });
+
+        for (Map.Entry<String, int[]> stringEntry : industryNatureData.entrySet()) {
+            int[] value = stringEntry.getValue();
+            maleArr.add(value[0]);
+            femaleArr.add(value[1]);
+        }
+
+        resultMap.put("industryNatureData", industryNatureData);
+        resultMap.put("maleArr", maleArr);
+        resultMap.put("femaleArr", femaleArr);
 
         return ResultVOUtil.success(resultMap);
     }

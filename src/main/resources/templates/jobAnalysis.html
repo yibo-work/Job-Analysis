@@ -25,7 +25,7 @@
 </div>
 <div class="layui-fluid" id="vmAnalysisData">
     <div class="layui-col-md12">
-        <div class="layui-card" v-if="jobData">
+        <div class="layui-card" v-if="!showEmpty">
             <div class="layui-card-header">学生就业分析</div>
             <div class="layui-card-body">
                 <ul class="layui-row layui-col-space15 layui-this x-admin-carousel x-admin-backlog">
@@ -70,18 +70,26 @@
                         </div>
                     </div>
                 </div>
-                <!--<div class="layui-row layui-col-space20">
+                <div class="layui-row layui-col-space20">
                     <div class="layui-col-sm12 layui-col-md12">
                         <div class="layui-card">
-                            &lt;!&ndash; 为 ECharts 准备一个具备大小（宽高）的 DOM &ndash;&gt;
-                            <div id="year" style="width: 1300px;height:600px;"></div>
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="yearAfter" style="width: 1300px;height:600px;"></div>
                         </div>
                     </div>
-                </div>-->
+                </div>
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-sm12 layui-col-md12">
+                        <div class="layui-card">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="industryNature" style="width: 1300px;height:600px;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="layui-card" v-else-if="showEmpty">
-            <div class="layui-card-header">学生个人分析</div>
+        <div class="layui-card" v-else>
+            <div class="layui-card-header">学生就业分析</div>
             <div class="layui-card-body" style="font-size: 18px;color: #FFB800">
                 无学生就业数据!
             </div>
@@ -92,7 +100,7 @@
 <script charset="utf-8" th:src="@{/js/echarts.js}" type="text/javascript"></script>
 <script type="text/javascript">
 
-    var vm = new Vue({
+    vm = new Vue({
         el: "#vmAnalysisData",
         data: {
             jobData: {},
@@ -111,13 +119,12 @@
 
                         _this.initAfterGraduation(result.data);
                         _this.initYear(result.data);
+                        _this.initIndustryNature(result.data);
+                        _this.initYearAfter(result.data);
 
                     } else if (result.code === 500) {
                         _this.showEmpty = true;
                     }
-                },
-                error: function () {
-                    layer.msg("初始加载失败！", {icon: 2});
                 }
             });
 
@@ -130,8 +137,6 @@
                 $(function () {
                     // 基于准备好的dom，初始化echarts实例
                     var yearChart = echarts.init(document.getElementById('year'));
-
-                    var seriesDataArray = [];
 
                     // 指定图表的配置项和数据
                     var yearPreference = analysisData.yearData;
@@ -158,7 +163,6 @@
                         legend: {
                             data: ['男', '女']
                         },
-
                         xAxis: [
                             {
                                 type: 'category',
@@ -276,68 +280,137 @@
                 });
 
             }
-            /*,
-             /!**
-              * 初始化就业情况echarts图
-              * @param analysisData 分析数据
-              *!/
-             initSituation: function (analysisData) {
-                 $(function () {
+            ,
+            /**
+             * 初始化行业性质echarts图
+             * @param analysisData 分析数据
+             */
+            initIndustryNature: function (analysisData) {
+                $(function () {
 
-                     // 基于准备好的dom，初始化echarts实例
-                     var situationChart = echarts.init(document.getElementById('situation'));
+                    // 基于准备好的dom，初始化echarts实例
+                    var industryNatureChart = echarts.init(document.getElementById('industryNature'));
 
-                     // 指定图表的配置项和数据
-                     var situationList = analysisData.situationList;
+                    // 指定图表的配置项和数据
+                    var industryNatureList = [];
 
-                     var nameData = [];
-                     var valueData = [];
+                    for (var industryNature in analysisData.industryNatureData) {
+                        industryNatureList.push(industryNature)
+                    }
 
-                     $(situationList).each(function () {
-                         if (this.money > 0) {
-                             nameData.push(this.year);
-                             valueData.push(this.money);
-                         }
-                     });
+                    // 指定图表的配置项和数据
+                    var industryNatureOption = {
+                        title: {
+                            text: '性别和行业性质的关系'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data: ['男', '女']
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        toolbox: {},
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: industryNatureList
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [
+                            {
+                                name: '男',
+                                type: 'line',
+                                data: analysisData.maleArr
+                            },
+                            {
+                                name: '女',
+                                type: 'line',
+                                data: analysisData.femaleArr
+                            }
+                        ]
+                    };
 
-                     // 指定图表的配置项和数据
-                     var situationOption = {
-                         title: {
-                             text: '最近一周就业情况'
-                         },
-                         tooltip: {
-                             trigger: 'axis',
-                             axisPointer: {
-                                 type: 'cross',
-                                 label: {
-                                     backgroundColor: '#6a7985'
-                                 }
-                             }
-                         },
-                         xAxis: {
-                             type: 'category',
-                             data: nameData
-                         },
-                         yAxis: {
-                             type: 'value'
-                         },
-                         series: [{
-                             data: valueData,
-                             type: 'line'
-                         }]
-                     };
+                    // 使用刚指定的配置项和数据显示图表。
+                    industryNatureChart.setOption(industryNatureOption, true);
 
+                });
+            },
+            /**
+             * 初始化年度和毕业去向echarts图
+             * @param analysisData 分析数据
+             */
+            initYearAfter: function (analysisData) {
+                $(function () {
 
-                     // 使用刚指定的配置项和数据显示图表。
-                     situationChart.setOption(situationOption, true);
+                    // 基于准备好的dom，初始化echarts实例
+                    var yearAfterChart = echarts.init(document.getElementById('yearAfter'));
 
-                 });
-             }*/
+                    var yearList = [];
+
+                    for (var year in analysisData.yearData) {
+                        yearList.push(year)
+                    }
+
+                    // 指定图表的配置项和数据
+                    var seriesList = [];
+
+                    for (var yearAfter in analysisData.yearAfterData) {
+
+                        var series = {};
+                        series.name = yearAfter;
+                        series.type = 'line';
+                        series.data = analysisData.yearAfterData[yearAfter];
+                        seriesList.push(series);
+
+                    }
+
+                    // 指定图表的配置项和数据
+                    var yearAfterOption = {
+                        title: {
+                            text: '年度和毕业去向的关系'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data: yearList
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        toolbox: {},
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: analysisData.afterList
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: seriesList
+                    };
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    yearAfterChart.setOption(yearAfterOption, true);
+
+                });
+            }
         }
     });
 
     layui.use(['form', 'layer'], function () {
-    })
+    });
 
 </script>
 </html>
