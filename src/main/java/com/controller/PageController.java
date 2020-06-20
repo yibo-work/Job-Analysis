@@ -25,8 +25,8 @@ public class PageController {
     @GetMapping("loginOut")
     public String loginOut(HttpSession session) {
         session.removeAttribute("USER");
-        session.invalidate();
         session.getServletContext().removeAttribute(session.getId());
+        session.invalidate();
         return "login";
     }
 
@@ -38,11 +38,6 @@ public class PageController {
     @GetMapping("/welcome")
     public String welcome() {
         return "welcome";
-    }
-
-    @GetMapping("/editMine")
-    public String editMine() {
-        return "editMine";
     }
 
     @GetMapping("/editPassword")

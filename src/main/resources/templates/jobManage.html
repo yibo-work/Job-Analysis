@@ -28,16 +28,79 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12" id="vmJob">
             <div class="layui-card">
-
+                <div class="layui-card-body">
+                    <form class="layui-form layui-col-space5" onsubmit="return false;">
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <select name="year">
+                                <option value="">年度</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <input class="layui-input" name="stuNo" placeholder="请输入学号">
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <select name="sex">
+                                <option value="">性别</option>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <select name="afterGraduation">
+                                <option value="">毕业去向</option>
+                                <option value="签约就业">签约就业</option>
+                                <option value="灵活就业">灵活就业</option>
+                                <option value="非派遣/劳动合同">非派遣/劳动合同</option>
+                                <option value="考取升学">考取升学</option>
+                                <option value="保送升学">保送升学</option>
+                                <option value="出国学习">出国学习</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <input class="layui-input" name="realCompany" placeholder="请输入实际单位">
+                        </div>
+                        <br/>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <input class="layui-input" name="companyLocation" placeholder="请输入单位所在地">
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <input class="layui-input" name="companyUnder" placeholder="请输入单位隶属">
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <input class="layui-input" name="companyNature" placeholder="请输入单位性质">
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <input class="layui-input" name="companyType" placeholder="请输入单位类型">
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <input class="layui-input" name="industryNature" placeholder="请输入行业性质">
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <button @click="getPage(1)" class="layui-btn" lay-filter="search" lay-submit="">
+                                <i class="layui-icon layui-icon-search"></i>查询
+                            </button>
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <button class="layui-btn" type="reset">
+                                <i class="layui-icon layui-icon-refresh-3"></i>重置
+                            </button>
+                        </div>
+                    </form>
+                </div>
                 <div class="layui-card-header">
-                    <button class="layui-btn" onclick="xadmin.open('添加就业','/jobAdd',500,800)">
-                        <i class="layui-icon"></i>添加就业
-                    </button>
-
                     <button class="layui-btn" id="uploadData">
                         <i class="layui-icon layui-icon-upload"></i>导入就业数据
                     </button>
-
+                    <button class="layui-btn" onclick="xadmin.open('添加就业','/jobAdd',500,800)">
+                        <i class="layui-icon"></i>添加就业
+                    </button>
                     <button class="layui-btn layui-btn-danger" id="truncateData">
                         <i class="layui-icon layui-icon-delete"></i>清空就业数据
                     </button>
@@ -96,7 +159,7 @@
                 <div class="layui-card-body" v-if="pageInfo.total != 0">
                     <div class="page">
                         <div>
-                            <a @click="getPage(pageInfo.firstPage)" class="prev" href="javascript:void(0)">
+                            <a @click="getPage(1)" class="prev" href="javascript:void(0)">
                                 首页
                             </a>
                             <a @click="getPage(pageInfo.prePage)" class="prev" href="javascript:void(0)"
@@ -108,7 +171,7 @@
                                v-if="pageInfo.hasNextPage">
                                 下一页
                             </a>
-                            <a @click="getPage(pageInfo.lastPage)" class="prev" href="javascript:void(0)"
+                            <a @click="getPage(pageInfo.pages)" class="prev" href="javascript:void(0)"
                                v-if="!pageInfo.isLastPage">
                                 末页
                             </a>
@@ -138,7 +201,19 @@
                     url += "&pageSize=" + pageSize;
                 }
 
+                url += "&year=" + $("[name=year]").val().trim();
+                url += "&stuNo=" + $("[name=stuNo]").val().trim();
+                url += "&sex=" + $("[name=sex]").val().trim();
+                url += "&afterGraduation=" + $("[name=afterGraduation]").val().trim();
+                url += "&realCompany=" + $("[name=realCompany]").val().trim();
+                url += "&companyLocation=" + $("[name=companyLocation]").val().trim();
+                url += "&companyUnder=" + $("[name=companyUnder]").val().trim();
+                url += "&companyNature=" + $("[name=companyNature]").val().trim();
+                url += "&companyType=" + $("[name=companyType]").val().trim();
+                url += "&industryNature=" + $("[name=industryNature]").val().trim();
+
                 $.getJSON(url, function (data) {
+                    console.info(data)
                     _this.pageInfo = data;
                 });
             },
@@ -231,16 +306,13 @@
         });
 
 
-        $("#truncateData").click(function(){
+        $("#truncateData").click(function () {
 
             layer.confirm('确认要清空就业数据吗？',
                 function () {
                     //发异步删除数据
                     $.ajax({
                         url: "/job/truncate",
-                        data: {
-                            id: id
-                        },
                         dataType: "json",
                         type: "delete",
                         success: function (result) {

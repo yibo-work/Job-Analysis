@@ -103,7 +103,8 @@ public class JobController {
             return ResultVOUtil.failure("删除失败！");
         }
     }
-/**
+
+    /**
      * 删除就业
      */
     @DeleteMapping("/truncate")
@@ -129,6 +130,22 @@ public class JobController {
             ex.printStackTrace();
             System.err.println(ex.getMessage());
             return ResultVOUtil.failure(ResultFailureEnum.IMPORT_ERROR);
+        }
+
+    }
+
+
+    /**
+     * 分析数据然后返回
+     */
+    @GetMapping("/getAnalysisData")
+    public ResultVO getAnalysisData() {
+        try {
+            return jobService.getAnalysisData(new RequestParamsUtil().getParameters());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.err.println(ex.getMessage());
+            return ResultVOUtil.failure("数据分析异常！");
         }
 
     }

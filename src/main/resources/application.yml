@@ -1,8 +1,7 @@
-spring:
-  # database
+spring:  # database
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3316/job_analysis?serverTimezone=Asia/Shanghai&useSSL=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://127.0.0.1:3306/job_analysis?serverTimezone=Asia/Shanghai&useSSL=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
     password: root
     username: root
   mvc:
@@ -12,20 +11,16 @@ spring:
   servlet:
     multipart:
       max-file-size: 30MB
-      max-request-size: 30MB
-#port
+      max-request-size: 30MB  #port
 server:
   port: 9015
   servlet:
-    session:
-      # session过期时间 不过期
-      timeout: -1
-# mybatis
+    session:  # session过期时间 不过期
+      timeout: -1  # mybatis
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: com.model, com.vo
-  configuration:
-    #把下划线转为驼峰
+  configuration:  #把下划线转为驼峰
     map-underscore-to-camel-case: true
 logging:
   level:

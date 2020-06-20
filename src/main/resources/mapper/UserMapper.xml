@@ -26,16 +26,13 @@
         select `id`,`name`,`password` from user
         <where>
             <if test="id != null and id != ''">
-                and id =
-                #{id}
+                and id =  #{id}
             </if>
             <if test="name != null and name != ''">
-                and name =
-                #{name}
+                and name =  #{name}
             </if>
             <if test="password != null and password != ''">
-                and password =
-                #{password}
+                and password =  #{password}
             </if>
         </where>
     </select>
@@ -53,11 +50,9 @@
         )
         values (
         <trim suffixOverrides=",">
-            <if test="name != null">
-                #{name},
+            <if test="name != null">  #{name},
             </if>
-            <if test="password != null">
-                #{password}
+            <if test="password != null">  #{password}
             </if>
         </trim>
         )

@@ -1,11 +1,13 @@
 package com.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.dao.JobDao;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.model.Job;
 import com.service.JobService;
 import com.utils.RequestParamsUtil;
+import com.utils.ResultVOUtil;
 import com.utils.XLSConvertCSVUtil;
 import com.utils.XLSXCovertCSVUtil;
 import com.vo.ResultVO;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -138,7 +141,72 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void truncate() {
-        jobDao.truncate ();
+        jobDao.truncate();
+    }
+
+    /**
+     * 分析数据
+     */
+    @Override
+    public ResultVO getAnalysisData(Map<String, Object> parameters) {
+
+        /*
+
+         * ⭐⭐⭐  总共多少人，男生，女生多少人（数值）
+         * ⭐⭐⭐  年度男生，女生多少人（柱状图）
+         * ⭐⭐⭐  毕业去向（饼形图）
+         * ⭐⭐⭐  年度和毕业去向的关系（折线图）待完成
+         * ⭐⭐⭐  性别和行业性质的关系（折线图）待完成
+         *
+         */
+        Map<String, Object> resultMap = new HashMap<>();
+        List<Job> jobList = jobDao.list(parameters);
+
+        if (CollectionUtil.isEmpty(jobList)) {
+            return ResultVOUtil.failure("无学生就业数据");
+        }
+
+        int maleCount = (int) jobList.stream().filter(job -> "男".equals(job.getSex())).count();
+        int femaleCount = (int) jobList.stream().filter(job -> "女".equals(job.getSex())).count();
+
+        resultMap.put("maleCount", maleCount);
+        resultMap.put("femaleCount", femaleCount);
+        resultMap.put("manCount", jobList.size());
+
+        Map<String, Integer> afterGraduationData = new HashMap<>();
+
+        jobList.forEach(job -> {
+            String key = job.getAfterGraduation();
+            Integer val = afterGraduationData.get(key);
+            if (val == null) {
+                afterGraduationData.put(key, 0);
+            } else {
+                afterGraduationData.put(key, val + 1);
+            }
+        });
+
+        resultMap.put("afterGraduationData", afterGraduationData);
+
+        Map<String, int[]> yearData = new HashMap<>();
+
+        jobList.forEach(job -> {
+            String key = job.getYear();
+            int[] val = yearData.get(key);
+            if (val == null) {
+                yearData.put(key, new int[2]);
+            } else {
+                if ("男".equals(job.getSex())) {
+                    val[0] = val[0] + 1;
+                } else if ("女".equals(job.getSex())) {
+                    val[1] = val[1] + 1;
+                }
+                yearData.put(key, val);
+            }
+        });
+
+        resultMap.put("yearData", yearData);
+
+        return ResultVOUtil.success(resultMap);
     }
 
 }

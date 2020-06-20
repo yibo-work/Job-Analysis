@@ -58,5 +58,13 @@ public interface JobService {
      */
     ResultVO importData(File targetFile) throws Exception;
 
+    /**
+     * 清空就业表
+     */
     void truncate();
+
+    /**
+     * 分析数据
+     */
+    ResultVO getAnalysisData(Map<String, Object> parameters);
 }

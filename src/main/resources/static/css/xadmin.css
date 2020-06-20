@@ -195,9 +195,7 @@ body {
     overflow: hidden;
 
     /*width: 0px;*/
-}
-
-#side-nav {
+}  #side-nav {
     width: 220px;
 }
 
@@ -444,21 +442,15 @@ table th, table td {
     font-size: 20px;
     color: #999;
     font-weight: 300;
-}
-
-#tab_right {
+}  #tab_right {
     display: none;
     width: 80px;
     position: absolute;
     top: 35px;
     left: 0px;
-}
-
-#tab_right dl {
+}  #tab_right dl {
     top: 0px;
-}
-
-#tab_show {
+}  #tab_show {
     position: absolute;
     top: 36px;
     bottom: 0px;
